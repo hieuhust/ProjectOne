@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 
 import android.os.AsyncTask;
 
@@ -15,6 +14,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.anonymous.carchecker.common.view.BaseActivity;
 
 /**
  * A login screen that offers login via email/password.
@@ -165,7 +166,7 @@ public class LoginActivity extends BaseActivity {
 
             try {
                 // Simulate network access.
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 return false;
             }

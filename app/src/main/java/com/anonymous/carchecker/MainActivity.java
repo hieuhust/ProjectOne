@@ -5,14 +5,16 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 
+import com.anonymous.carchecker.common.util.CircleTransform;
+import com.anonymous.carchecker.common.view.BaseActivity;
 import com.anonymous.carchecker.position.dao.DummyContent;
 import com.anonymous.carchecker.position.view.PositionInfoFragment;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, PositionInfoFragment.OnPositionInfoFragmentInteractionListener {
@@ -22,8 +24,6 @@ public class MainActivity extends BaseActivity
     private NavigationView mNavigationView;
 
     private Toolbar toolbar;
-
-    private FrameLayout mFrameLayout;
 
 
     @Override
@@ -42,8 +42,11 @@ public class MainActivity extends BaseActivity
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        mFrameLayout = (FrameLayout) findViewById(R.id.content_fragment_container);
+        // transform avatar to circle shape
+        ImageView avatar = (ImageView) mNavigationView.getHeaderView(0).findViewById(R.id.avata_nav_header_main);
+        Picasso.with(this).load(R.drawable.ic_user).transform(new CircleTransform()).into(avatar);
 
+        // Default go to the first fragment containing position info
         gotoFragment(R.id.content_fragment_container, PositionInfoFragment.newInstance(1));
     }
 
@@ -84,17 +87,9 @@ public class MainActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_position) {
             gotoFragment(R.id.content_fragment_container, PositionInfoFragment.newInstance(1));
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_review_hanh_trinh) {
 
         }
 

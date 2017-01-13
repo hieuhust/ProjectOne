@@ -3,33 +3,121 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/nav_position"
+            android:icon="@drawable/ic_home"
+            android:title="@string/position" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_review_hanh_trinh"
+            android:icon="@drawable/ic_replay"
+            android:title="@string/review_hanh_trinh" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/management">
         <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_manage_sub_account"
+                    android:icon="@drawable/ic_menu_user"
+                    android:title="@string/manage_sub_account" />
+                <item
+                    android:id="@+id/nav_company_info"
+                    android:icon="@drawable/ic_menu_building"
+                    android:title="@string/company_info" />
+                <item
+                    android:id="@+id/nav_traffic_info"
+                    android:icon="@drawable/ic_menu_car"
+                    android:title="@string/traffic_info" />
+                <item
+                    android:id="@+id/nav_driver_info"
+                    android:icon="@drawable/ic_menu_user"
+                    android:title="@string/driver_info" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/report_qcvn31">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_report_hanh_trinh"
+                    android:icon="@drawable/ic_menu_hanh_trinh_24dp"
+                    android:title="@string/hanh_trinh" />
+                <item
+                    android:id="@+id/nav_report_speed"
+                    android:icon="@drawable/ic_menu_clock_speed"
+                    android:title="@string/speed" />
+                <item
+                    android:id="@+id/nav_report_over_speed"
+                    android:icon="@drawable/ic_menu_overspeed"
+                    android:title="@string/over_speed" />
+                <item
+                    android:id="@+id/nav_report_drive_time"
+                    android:icon="@drawable/ic_menu_drivertime"
+                    android:title="@string/drive_time" />
+                <item
+                    android:id="@+id/nav_report_parking"
+                    android:icon="@drawable/ic_menu_parking"
+                    android:title="@string/parking" />
+                <item
+                    android:id="@+id/nav_report_by_traffic"
+                    android:icon="@drawable/ic_local_taxi_24dp"
+                    android:title="@string/report_by_traffic" />
+                <item
+                    android:id="@+id/nav_report_by_driver"
+                    android:icon="@drawable/ic_menu_user"
+                    android:title="@string/report_by_driver" />
+
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/report_enterprise">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_report_by_day"
+                    android:icon="@drawable/ic_calendar"
+                    android:title="@string/report_by_day" />
+                <item
+                    android:id="@+id/nav_report_operation_detail"
+                    android:icon="@drawable/ic_menu_clock_speed"
+                    android:title="@string/report_by_operation_detail" />
+                <item
+                    android:id="@+id/nav_report_input_status"
+                    android:icon="@drawable/fuel1"
+                    android:title="@string/report_input_status" />
+                <item
+                    android:id="@+id/nav_report_worked_time"
+                    android:icon="@drawable/ic_access_time_black_24dp"
+                    android:title="@string/worked_time" />
+                <item
+                    android:id="@+id/nav_chart_fuel"
+                    android:icon="@drawable/progress"
+                    android:title="@string/chart_fuel" />
+                <item
+                    android:id="@+id/nav_chart_speed"
+                    android:icon="@drawable/progress"
+                    android:title="@string/chart_speed" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/another">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_util"
+                    android:icon="@drawable/ic_menu_manage"
+                    android:title="@string/util" />
+                <item
+                    android:id="@+id/nav_guide"
+                    android:icon="@drawable/ic_help_24dp"
+                    android:title="@string/guide" />
+                <item
+                    android:id="@+id/nav_logout"
+                    android:icon="@drawable/ic_keyboard_tab_24dp"
+                    android:title="@string/logout" />
+            </group>
         </menu>
     </item>
 

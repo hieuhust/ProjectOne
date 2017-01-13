@@ -14,12 +14,48 @@
         completions."
     </string>
     <string name="title_activity_main">MainActivity</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Menu of NavigationView -->
+    <string name="position">Vị trí</string>
+    <string name="review_hanh_trinh">Xem lại hành trình</string>
+    <string name="report">Báo cáo</string>
+
+    <string name="report_qcvn31">Báo cáo QCVN31</string>
+    <string name="hanh_trinh">Hàng trình</string>
+    <string name="speed">Tốc độ</string>
+    <string name="over_speed">Quá tốc độ</string>
+    <string name="drive_time">Thời gian lái</string>
+    <string name="parking">Dừng đỗ</string>
+    <string name="report_by_traffic">Tổng hợp theo xe</string>
+    <string name="report_by_driver">Tổng hợp theo lái xe</string>
+
+    <string name="report_enterprise">Báo cáo doanh nghiệp</string>
+    <string name="report_by_day">Tổng hợp theo ngày</string>
+    <string name="report_by_operation_detail">Chi tiết hoạt động</string>
+    <string name="report_input_status">Báo cáo trạng thái đầu vào</string>
+    <string name="report_worked_time">Thời gian làm việc</string>
+    <string name="chart_fuel">Biểu đồ nguyên liệu</string>
+    <string name="chart_speed">Biểu đồ vận tốc</string>
+
+    <string name="management">Quản lý</string>
+    <string name="manage_sub_account">Quản lý tài khoản con</string>
+    <string name="company_info">Thông tin công ty</string>
+    <string name="driver_info">Thông tin lái xe</string>
+    <string name="traffic_info">Thông tin xe</string>
+    <string name="worked_time">Thời gian làm việc</string>
+    <string name="pass_point_control">Qua điểm kiểm soát</string>
+
+    <string name="another">Khác</string>
+    <string name="util">Tiện ích</string>
+    <string name="guide">Hướng dẫn</string>
+    <string name="logout">Đăng xuất</string>
+
+
+
+    <!--End-->
+
 </resources>
