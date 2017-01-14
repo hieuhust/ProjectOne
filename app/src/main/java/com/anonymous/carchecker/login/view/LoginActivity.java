@@ -1,13 +1,7 @@
-package com.anonymous.carchecker;
-
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.content.Intent;
+package com.anonymous.carchecker.login.view;
 
 import android.os.AsyncTask;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,10 +9,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.anonymous.carchecker.MainActivity;
+import com.anonymous.carchecker.R;
 import com.anonymous.carchecker.common.dao.PreferencesUtil;
 import com.anonymous.carchecker.common.util.MyProgressDialog;
 import com.anonymous.carchecker.common.view.BaseActivity;
-import com.anonymous.carchecker.position.model.Account;
+import com.anonymous.carchecker.login.model.Account;
 
 /**
  * A login screen that offers login via email/mPassword.

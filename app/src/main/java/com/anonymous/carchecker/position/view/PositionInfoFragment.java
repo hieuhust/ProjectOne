@@ -28,6 +28,7 @@ public class PositionInfoFragment extends BaseFragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnPositionInfoFragmentInteractionListener mListener;
+    private RecyclerView mRecyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -61,24 +62,22 @@ public class PositionInfoFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_position_info_list, container, false);
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new PositionInfoRecyclerViewAdapter(DummyContent.ITEMS, mListener, new PositionInfoRecyclerViewAdapter.ViewHolder.IViewHolderClick() {
-                @Override
-                public void onCardClick(View view, int position, PositionInfoRecyclerViewAdapter.ViewHolder viewHolder) {
-                    // Goto Map info activity
-                    Intent intent = new Intent(getActivity(), MapInfoActivity.class);
-                    getActivity().startActivity(intent);
-                }
-            }));
-
+        Context context = view.getContext();
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_fragment_pos_info);
+        if (mColumnCount <= 1) {
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        } else {
+            mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
+        mRecyclerView.setAdapter(new PositionInfoRecyclerViewAdapter(DummyContent.ITEMS, mListener, new PositionInfoRecyclerViewAdapter.ViewHolder.IViewHolderClick() {
+            @Override
+            public void onCardClick(View view, int position, PositionInfoRecyclerViewAdapter.ViewHolder viewHolder) {
+                // Goto Map info activity
+                Intent intent = new Intent(getActivity(), MapInfoActivity.class);
+                getActivity().startActivity(intent);
+            }
+        }));
+
         return view;
     }
 

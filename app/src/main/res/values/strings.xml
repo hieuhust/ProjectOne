@@ -2,10 +2,10 @@
     <string name="app_name">CarChecker</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_user">User</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
+    <string name="prompt_user">Tên đăng nhập</string>
+    <string name="prompt_password">Mật khẩu</string>
+    <string name="action_sign_in">Đăng nhập hoặc đăng kí</string>
+    <string name="action_sign_in_short">Đăng nhập</string>
     <string name="error_invalid_email">This mUserName must not empty</string>
     <string name="error_invalid_password">This password must not empty</string>
     <string name="error_incorrect_password">This password is incorrect</string>
@@ -23,6 +23,10 @@
 
     <string name="slogan_company">HỆ THỐNG KIỂM SOÁT HỖ TRỢ PHƯƠNG TIỆN VẬN TẢI</string>
     <string name="msg_loging">Đang đăng nhập</string>
+    <string name="contact">Liên hệ: </string>
+    <string name="mien_bac">Miền Bắc</string>
+    <string name="mien_nam">Miền Nam</string>
+    <string name="number_car">Số xe: 2</string>
 
 
     <!-- Menu of NavigationView -->
@@ -59,9 +63,19 @@
     <string name="util">Tiện ích</string>
     <string name="guide">Hướng dẫn</string>
     <string name="logout">Đăng xuất</string>
-
-
-
     <!--End-->
+
+    <string name="review">Xem lại</string>
+    <string name="take_care_customer">Hỗ trợ chăm sóc khách hàng</string>
+    <string name="hotline">Hotline: </string>
+    <string name="hotline_numberic"><u>190011</u></string>
+    <string name="vn_north_text">(Miền Bắc)</string>
+    <string name="vn_north_phone"><u>016483910126</u></string>
+    <string name="vn_south_text">(Miền Nam)</string>
+    <string name="vn_south_phone"><u>01648222086</u></string>
+    <string name="email">Email: </string>
+    <string name="my_email"><u>AAA@gmail.com</u></string>
+    <string name="website">Website: </string>
+    <string name="my_website"><u>avcccc.com</u></string>
 
 </resources>

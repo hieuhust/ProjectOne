@@ -4,18 +4,15 @@ package com.anonymous.carchecker;
  * Created by huyhieu.ph on 01/14/2016.
  */
 
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcel;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.anonymous.carchecker.common.view.BaseActivity;
+import com.anonymous.carchecker.login.view.LoginActivity;
 
 public class SplashScreen extends BaseActivity {
 

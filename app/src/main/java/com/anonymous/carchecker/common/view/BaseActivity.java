@@ -18,7 +18,6 @@ public class BaseActivity extends AppCompatActivity {
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the mUserName can navigate back
         transaction.replace(fragment_container, newFragment);
-        transaction.addToBackStack(null);
 
         // Commit the transaction
         transaction.commit();

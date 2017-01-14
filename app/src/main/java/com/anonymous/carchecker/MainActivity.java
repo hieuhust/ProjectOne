@@ -12,6 +12,8 @@ import android.widget.ImageView;
 
 import com.anonymous.carchecker.common.util.CircleTransform;
 import com.anonymous.carchecker.common.view.BaseActivity;
+import com.anonymous.carchecker.common.view.BaseFragment;
+import com.anonymous.carchecker.itinerary.view.ReviewItineraryFragment;
 import com.anonymous.carchecker.position.dao.DummyContent;
 import com.anonymous.carchecker.position.view.PositionInfoFragment;
 import com.squareup.picasso.Picasso;
@@ -31,6 +33,7 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.position);
         setSupportActionBar(toolbar);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -47,7 +50,7 @@ public class MainActivity extends BaseActivity
         Picasso.with(this).load(R.drawable.ic_user).transform(new CircleTransform()).into(avatar);
 
         // Default go to the first fragment containing position info
-        gotoFragment(R.id.content_fragment_container, PositionInfoFragment.newInstance(1));
+        setFragment(R.string.position, PositionInfoFragment.newInstance(1));
     }
 
     @Override
@@ -88,9 +91,9 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_position) {
-            gotoFragment(R.id.content_fragment_container, PositionInfoFragment.newInstance(1));
-        } else if (id == R.id.nav_review_hanh_trinh) {
-
+            setFragment(R.string.position, PositionInfoFragment.newInstance(1));
+        } else if (id == R.id.nav_review_itinerary) {
+            setFragment(R.string.review_hanh_trinh, ReviewItineraryFragment.newInstance());
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -100,6 +103,13 @@ public class MainActivity extends BaseActivity
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
 
+    }
+
+    private void setFragment(int titleToolbar, BaseFragment fragment) {
+        gotoFragment(R.id.content_fragment_container, fragment);
+
+        //set title for toolbar
+        toolbar.setTitle(titleToolbar);
     }
 
 

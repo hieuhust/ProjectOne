@@ -1,4 +1,4 @@
-package com.anonymous.carchecker.position.model;
+package com.anonymous.carchecker.login.model;
 
 import com.anonymous.carchecker.common.model.DataModel;
 
