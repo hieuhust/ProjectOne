@@ -1,4 +1,4 @@
-package com.anonymous.carchecker.position.dao;
+package com.anonymous.carchecker.position.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;

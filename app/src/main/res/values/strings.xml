@@ -8,7 +8,7 @@
     <string name="action_sign_in_short">Đăng nhập</string>
     <string name="error_invalid_email">This mUserName must not empty</string>
     <string name="error_invalid_password">This password must not empty</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_incorrect_password">This password or user is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
@@ -77,5 +77,6 @@
     <string name="my_email"><u>AAA@gmail.com</u></string>
     <string name="website">Website: </string>
     <string name="my_website"><u>avcccc.com</u></string>
-
+    <string name="logout_msg">Bạn có muốn đăng xuất tài khoản?</string>
+    <string name="confirm">Xác nhận</string>
 </resources>

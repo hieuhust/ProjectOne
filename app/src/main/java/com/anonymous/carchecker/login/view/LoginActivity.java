@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 import com.anonymous.carchecker.MainActivity;
 import com.anonymous.carchecker.R;
-import com.anonymous.carchecker.common.dao.PreferencesUtil;
+import com.anonymous.carchecker.common.data.PreferencesUtil;
 import com.anonymous.carchecker.common.util.MyProgressDialog;
 import com.anonymous.carchecker.common.view.BaseActivity;
 import com.anonymous.carchecker.login.model.Account;

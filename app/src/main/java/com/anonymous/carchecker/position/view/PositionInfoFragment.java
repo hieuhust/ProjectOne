@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 
 import com.anonymous.carchecker.common.view.BaseFragment;
 import com.anonymous.carchecker.R;
-import com.anonymous.carchecker.position.dao.DummyContent;
-import com.anonymous.carchecker.position.dao.DummyContent.DummyItem;
+import com.anonymous.carchecker.position.data.DummyContent;
+import com.anonymous.carchecker.position.data.DummyContent.DummyItem;
 
 /**
  * A fragment representing a list of Items.

@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anonymous.carchecker.R;
-import com.anonymous.carchecker.position.dao.DummyContent.DummyItem;
+import com.anonymous.carchecker.position.data.DummyContent.DummyItem;
 
 import java.util.List;
 

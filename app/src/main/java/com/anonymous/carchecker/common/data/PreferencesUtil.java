@@ -1,4 +1,4 @@
-package com.anonymous.carchecker.common.dao;
+package com.anonymous.carchecker.common.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -35,7 +35,7 @@ public class PreferencesUtil {
 
     public <T extends DataModel> T getDataModel(Class<T> cls) {
         Gson gson = new Gson();
-        String json = mSharedPreferences.getString(cls.getSimpleName(),null);
+        String json = mSharedPreferences.getString(cls.getSimpleName(), null);
         if (json == null) {
             return null;
         }
@@ -51,6 +51,11 @@ public class PreferencesUtil {
         String json = gson.toJson(dataModel);
         editor.putString(cls.getSimpleName(), json);
         editor.commit();
+    }
+
+    public <T extends DataModel> void removeDataModel(Class<T> cls) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.remove(cls.getSimpleName()).commit();
     }
 
 }

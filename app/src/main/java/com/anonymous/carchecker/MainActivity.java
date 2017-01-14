@@ -10,11 +10,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.anonymous.carchecker.common.data.PreferencesUtil;
 import com.anonymous.carchecker.common.util.CircleTransform;
+import com.anonymous.carchecker.common.util.MyDialogAlert;
 import com.anonymous.carchecker.common.view.BaseActivity;
 import com.anonymous.carchecker.common.view.BaseFragment;
 import com.anonymous.carchecker.itinerary.view.ReviewItineraryFragment;
-import com.anonymous.carchecker.position.dao.DummyContent;
+import com.anonymous.carchecker.login.model.Account;
+import com.anonymous.carchecker.login.view.LoginActivity;
+import com.anonymous.carchecker.position.data.DummyContent;
 import com.anonymous.carchecker.position.view.PositionInfoFragment;
 import com.squareup.picasso.Picasso;
 
@@ -94,6 +98,23 @@ public class MainActivity extends BaseActivity
             setFragment(R.string.position, PositionInfoFragment.newInstance(1));
         } else if (id == R.id.nav_review_itinerary) {
             setFragment(R.string.review_hanh_trinh, ReviewItineraryFragment.newInstance());
+        }
+        else if(id == R.id.nav_logout){
+            MyDialogAlert myDialogAlert = new MyDialogAlert(this);
+            myDialogAlert.show(R.string.confirm, R.string.logout_msg, new MyDialogAlert.DialogListener() {
+                @Override
+                public void onPositiveButtonClick() {
+                    PreferencesUtil preferencesUtil = PreferencesUtil.newInstance(getApplicationContext());
+                    preferencesUtil.removeDataModel(Account.class);
+                    gotoActivity(LoginActivity.class);
+                    finish();
+                }
+
+                @Override
+                public void onNegativeButtonClick() {
+
+                }
+            });
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
