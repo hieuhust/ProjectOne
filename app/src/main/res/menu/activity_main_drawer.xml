@@ -5,10 +5,11 @@
         <item
             android:id="@+id/nav_position"
             android:icon="@drawable/ic_home"
+            android:checked="true"
             android:title="@string/position" />
         <item
             android:id="@+id/nav_review_hanh_trinh"
-            android:icon="@drawable/ic_replay"
+            android:icon="@drawable/ic_action_refresh"
             android:title="@string/review_hanh_trinh" />
     </group>
 

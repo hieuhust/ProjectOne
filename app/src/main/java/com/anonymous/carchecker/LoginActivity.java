@@ -15,10 +15,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.anonymous.carchecker.common.dao.PreferencesUtil;
+import com.anonymous.carchecker.common.util.MyProgressDialog;
 import com.anonymous.carchecker.common.view.BaseActivity;
+import com.anonymous.carchecker.position.model.Account;
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via email/mPassword.
  */
 public class LoginActivity extends BaseActivity {
 
@@ -30,8 +33,10 @@ public class LoginActivity extends BaseActivity {
     // UI references.
     private EditText mUserView;
     private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
+    private MyProgressDialog myProgressDialog;
+
+    private Account mAccount = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +47,20 @@ public class LoginActivity extends BaseActivity {
 
         mPasswordView = (EditText) findViewById(R.id.password);
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button mSignInButton = (Button) findViewById(R.id.login_activity_login);
+        mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        PreferencesUtil preferencesUtil = PreferencesUtil.newInstance(this);
+        mAccount = preferencesUtil.getDataModel(Account.class);
+        if (mAccount != null) {
+            mUserView.setText(mAccount.mUserName);
+            mPasswordView.setText(mAccount.mPassword);
+        }
         attemptLogin();
     }
 
@@ -71,13 +80,13 @@ public class LoginActivity extends BaseActivity {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mUserView.getText().toString();
+        String username = mUserView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
+        // Check for a valid mPassword, if the mUserName entered one.
         if (TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
@@ -85,7 +94,7 @@ public class LoginActivity extends BaseActivity {
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(username)) {
             mUserView.setError(getString(R.string.error_field_required));
             focusView = mUserView;
             cancel = true;
@@ -97,73 +106,29 @@ public class LoginActivity extends BaseActivity {
             focusView.requestFocus();
         } else {
             // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            // perform the mUserName login attempt.
+            myProgressDialog = new MyProgressDialog(this);
+            myProgressDialog.show("", getResources().getString(R.string.msg_loging));
+            Account account = new Account(username, password);
+            mAuthTask = new UserLoginTask(account);
             mAuthTask.execute((Void) null);
         }
     }
 
     /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    private void gotoMainContent() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
-
-
-    /**
      * Represents an asynchronous login/registration task used to authenticate
-     * the user.
+     * the mUserName.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
-        private final String mPassword;
+        private Account mAccount;
 
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
+        UserLoginTask(Account account) {
+            mAccount = account;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
             try {
                 // Simulate network access.
                 Thread.sleep(500);
@@ -171,8 +136,12 @@ public class LoginActivity extends BaseActivity {
                 return false;
             }
 
+            if (mAccount != null && mAccount.mUserName.equals("hieu")) {
+                return true;
+            }
+
             // TODO: register the new account here.
-            return true;
+            return false;
         }
 
         @Override
@@ -180,19 +149,24 @@ public class LoginActivity extends BaseActivity {
             mAuthTask = null;
 
             if (success) {
-                gotoMainContent();
+                //Save to preference
+                PreferencesUtil preferencesUtil = PreferencesUtil.newInstance(LoginActivity.this);
+                preferencesUtil.setDataModel(mAccount, Account.class);
+
+                //Goto MainActivity
+                gotoActivity(MainActivity.class);
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
-                showProgress(false);
+                myProgressDialog.hide();
             }
         }
 
         @Override
         protected void onCancelled() {
             mAuthTask = null;
-            showProgress(false);
+            myProgressDialog.hide();
         }
     }
 }

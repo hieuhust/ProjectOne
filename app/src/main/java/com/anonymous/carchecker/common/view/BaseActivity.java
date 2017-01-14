@@ -1,5 +1,6 @@
 package com.anonymous.carchecker.common.view;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
@@ -9,16 +10,23 @@ import android.support.v7.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {
 
+    public String TAG = this.getClass().getSimpleName();
+
     public void gotoFragment(int fragment_container, BaseFragment newFragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back stack so the user can navigate back
+        // and add the transaction to the back stack so the mUserName can navigate back
         transaction.replace(fragment_container, newFragment);
         transaction.addToBackStack(null);
 
         // Commit the transaction
         transaction.commit();
+    }
+
+    public void gotoActivity(Class cls) {
+        Intent intent = new Intent(this, cls);
+        startActivity(intent);
     }
 
 }
