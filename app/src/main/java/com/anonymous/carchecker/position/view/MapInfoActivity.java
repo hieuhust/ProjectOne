@@ -1,14 +1,24 @@
 package com.anonymous.carchecker.position.view;
 
+import android.app.ActionBar;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.anonymous.carchecker.R;
+import com.anonymous.carchecker.common.logger.Logger;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,50 +35,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCallback {
-    int currentPt;
-
-    private List<Marker> markers = new ArrayList<Marker>();
-
+    public static final String TAG = "MapInfoActivity";
+    private List<Marker> markers = new ArrayList<>();
     private GoogleMap googleMap;
-
-    private Marker selectedMarker;
-
     private final Handler mHandler = new Handler();
-
     private Animator animator = new Animator();
-
-    GoogleMap.CancelableCallback simpleAnimationCancelableCallback =
-            new GoogleMap.CancelableCallback(){
-
-                @Override
-                public void onCancel() {
-                }
-
-                @Override
-                public void onFinish() {
-
-                    if(++currentPt < markers.size()){
-
-                        LatLng targetLatLng = markers.get(currentPt).getPosition();
-
-                        CameraPosition cameraPosition =
-                                new CameraPosition.Builder()
-                                        .target(targetLatLng)
-                                        .tilt(currentPt<markers.size()-1 ? 90 : 0)
-                                        .zoom(googleMap.getCameraPosition().zoom)
-                                        .build();
-
-
-                        googleMap.animateCamera(
-                                CameraUpdateFactory.newCameraPosition(cameraPosition),
-                                3000,
-                                simpleAnimationCancelableCallback);
-
-                        highLightMarker(currentPt);
-
-                    }
-                }
-            };
+    private Button mBtWatchButton;
+    private boolean mIsWatched;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,41 +51,69 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        mBtWatchButton = (Button) findViewById(R.id.mWatchButton);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        initToolBar();
+        mBtWatchButton.setAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_select));
+        mBtWatchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mIsWatched){
+                    mBtWatchButton.setText(getApplicationContext().getString(R.string.watch));
+                    mBtWatchButton.setBackgroundResource(R.drawable.xem_button);
+                    mIsWatched = false;
+                    animator.stop();
+                } else {
+                    mBtWatchButton.setText(getApplicationContext().getString(R.string.stop));
+                    mBtWatchButton.setBackgroundResource(R.drawable.dung_button);
+                    mIsWatched = true;
+                    animator.startAnimation(true);
+                }
+
+            }
+        });
         mapFragment.getMapAsync(this);
     }
-
+    public void initToolBar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.itinerary);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(
+        new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        }
+        );
+        setSupportActionBar(toolbar);
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
 
         addDefaultLocations();
-        animator.startAnimation(true);
+        animator.initializePolyLine();
     }
 
-    private void startAnimation() {
-        resetMarkers();
-        googleMap.animateCamera(
-                CameraUpdateFactory.newLatLngZoom(markers.get(0).getPosition(), 20),
-                5000,
-                simpleAnimationCancelableCallback);
-
-        currentPt = 0-1;
-    }
     private void addDefaultLocations() {
         clearMarkers();
-//        addMarkerToMap(new LatLng(21.734106,105.25956));
-//        addMarkerToMap(new LatLng(21.697653,105.438698));
-        addMarkerToMap(new LatLng(50.961813797827055,3.5168474167585373));
-        addMarkerToMap(new LatLng(50.96085423274633,3.517405651509762));
-        addMarkerToMap(new LatLng(50.96020550146382,3.5177918896079063));
-        addMarkerToMap(new LatLng(50.95936754348453,3.518972061574459));
-        addMarkerToMap(new LatLng(50.95877285446026,3.5199161991477013));
-        addMarkerToMap(new LatLng(50.958179213755905,3.520646095275879));
-        addMarkerToMap(new LatLng(50.95901719316589,3.5222768783569336));
-        addMarkerToMap(new LatLng(50.95954430150347,3.523542881011963));
-        addMarkerToMap(new LatLng(50.95873336312275,3.5244011878967285));
-        addMarkerToMap(new LatLng(50.95955781702322,3.525688648223877));
-        addMarkerToMap(new LatLng(50.958855004782116,3.5269761085510254));
+        addMarkerToMap(new LatLng(21.734106, 105.25956), false);
+        addMarkerToMap(new LatLng(21.73056, 105.287498), true);
+        addMarkerToMap(new LatLng(21.736765, 105.280807), true);
+        addMarkerToMap(new LatLng(21.738024, 105.286842), true);
+        addMarkerToMap(new LatLng(21.734106, 105.25956), true);
+        addMarkerToMap(new LatLng(21.737768, 105.282921), true);
+        addMarkerToMap(new LatLng(21.736843, 105.276176), true);
+        addMarkerToMap(new LatLng(21.732967, 105.259758), true);
+        addMarkerToMap(new LatLng(21.739027, 105.261452), true);
+        addMarkerToMap(new LatLng(21.733704, 105.261749), true);
+        addMarkerToMap(new LatLng(21.732967, 105.259758), true);
+        addMarkerToMap(new LatLng(21.736698, 105.275635), true);
+        addMarkerToMap(new LatLng(21.734106, 105.25956), true);
+        addMarkerToMap(new LatLng(21.736975, 105.28154), true);
+        addMarkerToMap(new LatLng(21.734106, 105.25956), true);
+        addMarkerToMap(new LatLng(21.733763, 105.262306), false);
     }
 
     private Location convertLatLngToLocation(LatLng latLng) {
@@ -121,9 +123,9 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
         return loc;
     }
 
-    private float bearingBetweenLatLngs(LatLng begin,LatLng end) {
-        Location beginL= convertLatLngToLocation(begin);
-        Location endL= convertLatLngToLocation(end);
+    private float bearingBetweenLatLngs(LatLng begin, LatLng end) {
+        Location beginL = convertLatLngToLocation(begin);
+        Location endL = convertLatLngToLocation(end);
         return beginL.bearingTo(endL);
     }
 
@@ -136,22 +138,19 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
 
-    public void addMarkerToMap(LatLng latLng) {
+    public void addMarkerToMap(LatLng latLng, boolean isMarkerRemoved) {
         Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng)
                 .title("Kien An")
                 .snippet("Map example"));
         markers.add(marker);
-
+        if (isMarkerRemoved) {
+            marker.setVisible(false);
+        }
     }
 
     public void clearMarkers() {
         googleMap.clear();
         markers.clear();
-    }
-
-    public void removeSelectedMarker() {
-        this.markers.remove(this.selectedMarker);
-        this.selectedMarker.remove();
     }
 
     private void highLightMarker(int index) {
@@ -161,8 +160,6 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
     private void highLightMarker(Marker marker) {
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         marker.showInfoWindow();
-        //Utils.bounceMarker(googleMap, marker);
-        this.selectedMarker=marker;
     }
 
     private void resetMarkers() {
@@ -183,7 +180,7 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
 
         float tilt = 90;
         float zoom = 15.5f;
-        boolean upward=true;
+        boolean upward = true;
 
         long start = SystemClock.uptimeMillis();
 
@@ -230,18 +227,20 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
         private void setupCameraPositionForMovement(LatLng markerPos,
                                                     LatLng secondPos) {
 
-            float bearing = bearingBetweenLatLngs(markerPos,secondPos);
+            float bearing = bearingBetweenLatLngs(markerPos, secondPos);
 
             trackingMarker = googleMap.addMarker(new MarkerOptions().position(markerPos)
-                    .title("title")
-                    .snippet("snippet"));
+                    .title("car")
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.carr))
+                    .snippet("car"));
 
             CameraPosition cameraPosition =
                     new CameraPosition.Builder()
                             .target(markerPos)
                             .bearing(bearing + BEARING_OFFSET)
                             .tilt(90)
-                            .zoom(googleMap.getCameraPosition().zoom >=16 ? googleMap.getCameraPosition().zoom : 16)
+//                            .zoom(googleMap.getCameraPosition().zoom >= 16 ? googleMap.getCameraPosition().zoom : 16)
+                            .zoom(13)
                             .build();
 
             googleMap.animateCamera(
@@ -266,11 +265,10 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
         }
 
         private Polyline polyLine;
-        private PolylineOptions rectOptions = new PolylineOptions();
+        private PolylineOptions rectOptions = new PolylineOptions().color(Color.GREEN).width(2);;
 
 
         private Polyline initializePolyLine() {
-            //polyLinePoints = new ArrayList<LatLng>();
             rectOptions.add(markers.get(0).getPosition());
             return googleMap.addPolyline(rectOptions);
         }
@@ -290,7 +288,7 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
         }
 
         public void startAnimation(boolean showPolyLine) {
-            if (markers.size()>=2) {
+            if (markers.size() >= 2) {
                 animator.initialize(showPolyLine);
             }
         }
@@ -300,13 +298,10 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
         public void run() {
 
             long elapsed = SystemClock.uptimeMillis() - start;
-            double t = interpolator.getInterpolation((float)elapsed/ANIMATE_SPEEED);
+            double t = interpolator.getInterpolation((float) elapsed / ANIMATE_SPEEED);
 
-//			LatLng endLatLng = getEndLatLng();
-//			LatLng beginLatLng = getBeginLatLng();
-
-            double lat = t * endLatLng.latitude + (1-t) * beginLatLng.latitude;
-            double lng = t * endLatLng.longitude + (1-t) * beginLatLng.longitude;
+            double lat = t * endLatLng.latitude + (1 - t) * beginLatLng.latitude;
+            double lng = t * endLatLng.longitude + (1 - t) * beginLatLng.longitude;
             LatLng newPosition = new LatLng(lat, lng);
 
             trackingMarker.setPosition(newPosition);
@@ -314,18 +309,14 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
             if (showPolyline) {
                 updatePolyLine(newPosition);
             }
-
             // It's not possible to move the marker + center it through a cameraposition update while another camerapostioning was already happening.
-            //navigateToPoint(newPosition,tilt,bearing,currentZoom,false);
-            //navigateToPoint(newPosition,false);
-
-            if (t< 1) {
+            if (t < 1) {
                 mHandler.postDelayed(this, 16);
             } else {
 
-                System.out.println("Move to next marker.... current = " + currentIndex + " and size = " + markers.size());
+                Logger.d(TAG, "Move to next marker.... current = " + currentIndex + " and size = " + markers.size());
                 // imagine 5 elements -  0|1|2|3|4 currentindex must be smaller than 4
-                if (currentIndex<markers.size()-2) {
+                if (currentIndex < markers.size() - 2) {
 
                     currentIndex++;
 
@@ -345,7 +336,7 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
                     CameraPosition cameraPosition =
                             new CameraPosition.Builder()
                                     .target(end) // changed this...
-                                    .bearing(bearingL  + BEARING_OFFSET)
+                                    .bearing(bearingL + BEARING_OFFSET)
                                     .tilt(tilt)
                                     .zoom(googleMap.getCameraPosition().zoom)
                                     .build();
@@ -369,11 +360,8 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
             }
         }
 
-
-
-
         private LatLng getEndLatLng() {
-            return markers.get(currentIndex+1).getPosition();
+            return markers.get(currentIndex + 1).getPosition();
         }
 
         private LatLng getBeginLatLng() {
@@ -381,26 +369,28 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
         }
 
         private void adjustCameraPosition() {
-            //System.out.println("tilt = " + tilt);
-            //System.out.println("upward = " + upward);
-            //System.out.println("zoom = " + zoom);
+            Logger.d(TAG, "tilt = " + tilt);
+            Logger.d(TAG, "upward = " + upward);
+            Logger.d(TAG, "zoom = " + zoom);
             if (upward) {
 
-                if (tilt<90) {
-                    tilt ++;
-                    zoom-=0.01f;
+                if (tilt < 90) {
+                    tilt++;
+                    zoom -= 0.01f;
                 } else {
-                    upward=false;
+                    upward = false;
                 }
 
             } else {
-                if (tilt>0) {
-                    tilt --;
-                    zoom+=0.01f;
+                if (tilt > 0) {
+                    tilt--;
+                    zoom += 0.01f;
                 } else {
-                    upward=true;
+                    upward = true;
                 }
             }
         }
-    };
+    }
+
+    ;
 }

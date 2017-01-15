@@ -79,4 +79,7 @@
     <string name="my_website"><u>avcccc.com</u></string>
     <string name="logout_msg">Bạn có muốn đăng xuất tài khoản?</string>
     <string name="confirm">Xác nhận</string>
+    <string name="watch">xem</string>
+    <string name="stop">dừng</string>
+    <string name="itinerary">hành trình</string>
 </resources>
