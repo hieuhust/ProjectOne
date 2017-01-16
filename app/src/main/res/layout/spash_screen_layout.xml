@@ -11,7 +11,7 @@
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/logo"
+        android:src="@drawable/logo_large"
         android:text="@string/app_name" />
 
     <LinearLayout
@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="4"
             android:gravity="center"
+            android:textAppearance="?attr/textAppearanceListItem"
             android:text="@string/slogan_company"
             android:textSize="20sp" />
     </LinearLayout>

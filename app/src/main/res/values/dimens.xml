@@ -7,6 +7,7 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="avata_nav_header_height">60dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
+    <dimen name="text_margin_fragment_position_info_item">5dp</dimen>
     <dimen name="take_care_customer_margin">16dp</dimen>
+
 </resources>

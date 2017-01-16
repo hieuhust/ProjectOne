@@ -1,10 +1,13 @@
 package com.anonymous.carchecker;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +21,7 @@ import com.anonymous.carchecker.common.view.BaseFragment;
 import com.anonymous.carchecker.itinerary.view.ReviewItineraryFragment;
 import com.anonymous.carchecker.login.model.Account;
 import com.anonymous.carchecker.login.view.LoginActivity;
-import com.anonymous.carchecker.position.data.DummyContent;
+import com.anonymous.carchecker.position.model.InfoVehicle;
 import com.anonymous.carchecker.position.view.PositionInfoFragment;
 import com.squareup.picasso.Picasso;
 
@@ -31,12 +34,15 @@ public class MainActivity extends BaseActivity
 
     private Toolbar toolbar;
 
+    private Menu mMenu;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar_app_bar_main);
         toolbar.setTitle(R.string.position);
         setSupportActionBar(toolbar);
 
@@ -68,8 +74,17 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the mMenu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        this.mMenu = menu;
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
 
@@ -81,7 +96,7 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
+        if (id == R.id.menu_search) {
             return true;
         }
 
@@ -122,7 +137,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(InfoVehicle item) {
 
     }
 
@@ -132,6 +147,8 @@ public class MainActivity extends BaseActivity
         //set title for toolbar
         toolbar.setTitle(titleToolbar);
     }
+
+
 
 
 }

@@ -26,7 +26,7 @@
     <string name="contact">Liên hệ: </string>
     <string name="mien_bac">Miền Bắc</string>
     <string name="mien_nam">Miền Nam</string>
-    <string name="number_car">Số xe: 2</string>
+    <string name="number_car">Số xe:</string>
 
 
     <!-- Menu of NavigationView -->
@@ -82,4 +82,7 @@
     <string name="watch">xem</string>
     <string name="stop">dừng</string>
     <string name="itinerary">hành trình</string>
+    <string name="can_not_call_number_msg">Không thể gọi tới số</string>
+    <string name="search_hint">Type and Search</string>
+
 </resources>
