@@ -14,6 +14,7 @@
     <color name="colorBlack20">#33000000</color>
     <color name="colorMoreGray">#50000000</color>
     <color name="colorBlueSky">#0099FF</color>
+    <color name="colorBlueSkyLight">#CCFFFF</color>
     <color name="text_color">#FFFFFF</color>
     <color name="text_color_hint">#FFFFFF</color>
     <color name="colorSelectLanguageBackground">#20000000</color>

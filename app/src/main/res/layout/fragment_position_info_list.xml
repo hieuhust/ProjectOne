@@ -11,8 +11,6 @@
         android:name="com.anonymous.carchecker.position.PositionInfoFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_weight="11"
         app:layoutManager="LinearLayoutManager"
         tools:context="com.anonymous.carchecker.position.view.PositionInfoFragment"
@@ -39,22 +37,27 @@
             android:text="@string/contact" />
 
         <TextView
+            android:id="@+id/north_phone_fragment_position_info_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="center"
+            android:clickable="true"
             android:textColor="@color/colorBlueSky"
             android:text="@string/mien_bac" />
 
         <TextView
+            android:id="@+id/south_phone_fragment_position_info_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="center"
+            android:clickable="true"
             android:textColor="@color/colorBlueSky"
             android:text="@string/mien_nam" />
 
         <TextView
+            android:id="@+id/number_vehicle_fragment_position_info_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
