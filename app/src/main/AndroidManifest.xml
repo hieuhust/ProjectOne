@@ -65,7 +65,11 @@
         <activity
             android:name=".position.view.MapInfoActivity"
             android:label="@string/itinerary"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppThemeItinerary" />
+
+        <activity
+            android:name=".itinerary.view.LocationInfoMapActivity"
+            android:theme="@style/AppThemeItinerary" />
     </application>
 
 </manifest>

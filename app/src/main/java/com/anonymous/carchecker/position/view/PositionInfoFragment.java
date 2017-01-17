@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.anonymous.carchecker.common.view.BaseFragment;
 import com.anonymous.carchecker.R;
+import com.anonymous.carchecker.itinerary.view.LocationInfoMapActivity;
 import com.anonymous.carchecker.position.data.DummyContent;
 import com.anonymous.carchecker.position.data.DummyContent.DummyItem;
 
@@ -73,8 +74,9 @@ public class PositionInfoFragment extends BaseFragment {
             @Override
             public void onCardClick(View view, int position, PositionInfoRecyclerViewAdapter.ViewHolder viewHolder) {
                 // Goto Map info activity
-                Intent intent = new Intent(getActivity(), MapInfoActivity.class);
+                Intent intent = new Intent(getActivity(), LocationInfoMapActivity.class);
                 getActivity().startActivity(intent);
+
             }
         }));
 

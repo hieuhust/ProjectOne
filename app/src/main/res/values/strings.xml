@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">CarChecker</string>
 
+    <string name="user_name">HOWO VIỆT NHẬT (ĐL TÙNG LÂM)</string>
     <!-- Strings related to login -->
     <string name="prompt_user">Tên đăng nhập</string>
     <string name="prompt_password">Mật khẩu</string>
@@ -78,8 +79,34 @@
     <string name="website">Website: </string>
     <string name="my_website"><u>avcccc.com</u></string>
     <string name="logout_msg">Bạn có muốn đăng xuất tài khoản?</string>
+    <string name="fake_msg_data"><b>Loại xe</b>: HoWo \n<b>Biển số</b>: 29C-64344 \n<b>Số VIN</b>: Chưa cập nhập \n<b>Lái xe</b>: Nguyen Van T \n<b>Số GPLX</b>: chưa cập nhập \n<b>Hạn GPLX</b>: chưa cập nhập</string>
     <string name="confirm">Xác nhận</string>
     <string name="watch">xem</string>
     <string name="stop">dừng</string>
     <string name="itinerary">hành trình</string>
+    <string name="location">Vị trí</string>
+
+    <string-array name="speed">
+        <item>100</item>
+        <item>200</item>
+        <item>300</item>
+        <item>400</item>
+        <item>500</item>
+        <item>600</item>
+        <item>800</item>
+        <item>1000</item>
+    </string-array>
+
+    <!--font name-->
+    <string name="roboto_regular">sans-serif</string>
+    <string name="roboto_light">sans-serif-light</string>
+    <string name="roboto_condensed">sans-serif-condensed</string>
+    <string name="roboto_black">sans-serif-black</string>
+    <string name="roboto_thin">sans-serif-thin</string>
+    <string name="roboto_medium">sans-serif-medium</string>
+
+    <string name="notice">Notice</string>
+    <string name="network_error">Please check your internet connection and try again</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Cancel</string>
 </resources>

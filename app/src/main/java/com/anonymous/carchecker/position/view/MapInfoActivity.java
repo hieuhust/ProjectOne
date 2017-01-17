@@ -1,37 +1,45 @@
 package com.anonymous.carchecker.position.view;
 
-import android.app.ActionBar;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.Settings;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.anonymous.carchecker.R;
+import com.anonymous.carchecker.common.ApplicationUtil;
+import com.anonymous.carchecker.common.CustomDialogBuilder;
 import com.anonymous.carchecker.common.logger.Logger;
+import com.anonymous.carchecker.common.util.MyDialogAlert;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -42,58 +50,68 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
     private Animator animator = new Animator();
     private Button mBtWatchButton;
     private boolean mIsWatched;
-    private Toolbar toolbar;
+    private Spinner mSpeedSpinner;
+    private SpinnerAdapter mSpinnerAdapter;
+    private Context mContext;
+    private PolylineOptions mRectOptions = new PolylineOptions().color(Color.BLUE).width(5);
+    private boolean mIsMapReady;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_info);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mBtWatchButton = (Button) findViewById(R.id.mWatchButton);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        initToolBar();
-        mBtWatchButton.setAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_select));
-        mBtWatchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mIsWatched){
-                    mBtWatchButton.setText(getApplicationContext().getString(R.string.watch));
-                    mBtWatchButton.setBackgroundResource(R.drawable.xem_button);
-                    mIsWatched = false;
-                    animator.stop();
-                } else {
-                    mBtWatchButton.setText(getApplicationContext().getString(R.string.stop));
-                    mBtWatchButton.setBackgroundResource(R.drawable.dung_button);
-                    mIsWatched = true;
-                    animator.startAnimation(true);
-                }
-
-            }
-        });
-        mapFragment.getMapAsync(this);
-    }
-    public void initToolBar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.itinerary);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        toolbar.setNavigationOnClickListener(
-        new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        }
-        );
+        mContext = getApplicationContext();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar != null) {
+            actionbar.setDisplayShowTitleEnabled(true);
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setTitle(R.string.itinerary);
+            actionbar.setHomeButtonEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+        }
+
+        if (!ApplicationUtil.isNetworkAvailable(mContext)) {
+            Logger.d(TAG, "network errors");
+            showNetworkUnavailable();
+        } else {
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mBtWatchButton = (Button) findViewById(R.id.mWatchButton);
+            mBtWatchButton.setAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_select));
+            mBtWatchButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mIsMapReady){
+                        if (mIsWatched) {
+                            mBtWatchButton.setText(mContext.getString(R.string.watch));
+                            mBtWatchButton.setBackgroundResource(R.drawable.xem_button);
+                            mIsWatched = false;
+                            animator.stopAnimation();
+                        } else {
+                            mBtWatchButton.setText(mContext.getString(R.string.stop));
+                            mBtWatchButton.setBackgroundResource(R.drawable.dung_button);
+                            mIsWatched = true;
+                            animator.startAnimation(true);
+                        }
+                    }else{
+                        Toast.makeText(mContext, "bản đồ chưa sẵn sàng, hãy đợi ít phút!!", Toast.LENGTH_LONG);
+                    }
+                }
+            });
+            mapFragment.getMapAsync(this);
+        }
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        mIsMapReady = true;
         this.googleMap = googleMap;
 
         addDefaultLocations();
-        animator.initializePolyLine();
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markers.get(0).getPosition(), 13));
     }
 
     private void addDefaultLocations() {
@@ -114,35 +132,15 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
         addMarkerToMap(new LatLng(21.736975, 105.28154), true);
         addMarkerToMap(new LatLng(21.734106, 105.25956), true);
         addMarkerToMap(new LatLng(21.733763, 105.262306), false);
+        googleMap.addPolyline(mRectOptions);
     }
 
-    private Location convertLatLngToLocation(LatLng latLng) {
-        Location loc = new Location("someLoc");
-        loc.setLatitude(latLng.latitude);
-        loc.setLongitude(latLng.longitude);
-        return loc;
-    }
-
-    private float bearingBetweenLatLngs(LatLng begin, LatLng end) {
-        Location beginL = convertLatLngToLocation(begin);
-        Location endL = convertLatLngToLocation(end);
-        return beginL.bearingTo(endL);
-    }
-
-    public void toggleStyle() {
-        if (GoogleMap.MAP_TYPE_NORMAL == googleMap.getMapType()) {
-            googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        } else {
-            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        }
-    }
-
-
-    public void addMarkerToMap(LatLng latLng, boolean isMarkerRemoved) {
+    private void addMarkerToMap(LatLng latLng, boolean isMarkerRemoved) {
         Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng)
                 .title("Kien An")
                 .snippet("Map example"));
         markers.add(marker);
+        mRectOptions.add(marker.getPosition());
         if (isMarkerRemoved) {
             marker.setVisible(false);
         }
@@ -170,17 +168,11 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
 
     public class Animator implements Runnable {
 
-        private static final int ANIMATE_SPEEED = 1500;
-        private static final int ANIMATE_SPEEED_TURN = 1000;
-        private static final int BEARING_OFFSET = 20;
+        private int animate_speed = 1500;
 
         private final Interpolator interpolator = new LinearInterpolator();
 
         int currentIndex = 0;
-
-        float tilt = 90;
-        float zoom = 15.5f;
-        boolean upward = true;
 
         long start = SystemClock.uptimeMillis();
 
@@ -191,7 +183,7 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
 
         private Marker trackingMarker;
 
-        public void reset() {
+        private void reset() {
             resetMarkers();
             start = SystemClock.uptimeMillis();
             currentIndex = 0;
@@ -200,105 +192,51 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
 
         }
 
-        public void stop() {
+        private void finalizeStop() {
             trackingMarker.remove();
             mHandler.removeCallbacks(animator);
-
+            mBtWatchButton.setText(mContext.getString(R.string.watch));
+            mBtWatchButton.setBackgroundResource(R.drawable.xem_button);
+            mIsWatched = false;
         }
 
-        public void initialize(boolean showPolyLine) {
+        private void setAnimateSpeed (int speed) {
+            animate_speed = speed;
+        }
+
+        private void initialize(boolean showPolyLine) {
             reset();
             this.showPolyline = showPolyLine;
 
-            highLightMarker(0);
-
-            if (showPolyLine) {
-                polyLine = initializePolyLine();
-            }
-
-            // We first need to put the camera in the correct position for the first run (we need 2 markers for this).....
             LatLng markerPos = markers.get(0).getPosition();
-            LatLng secondPos = markers.get(1).getPosition();
-
-            setupCameraPositionForMovement(markerPos, secondPos);
-
-        }
-
-        private void setupCameraPositionForMovement(LatLng markerPos,
-                                                    LatLng secondPos) {
-
-            float bearing = bearingBetweenLatLngs(markerPos, secondPos);
 
             trackingMarker = googleMap.addMarker(new MarkerOptions().position(markerPos)
                     .title("car")
                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.carr))
                     .snippet("car"));
+            animator.reset();
+            highLightMarker(0);
+            Handler handler = new Handler();
+            handler.post(animator);
 
-            CameraPosition cameraPosition =
-                    new CameraPosition.Builder()
-                            .target(markerPos)
-                            .bearing(bearing + BEARING_OFFSET)
-                            .tilt(90)
-//                            .zoom(googleMap.getCameraPosition().zoom >= 16 ? googleMap.getCameraPosition().zoom : 16)
-                            .zoom(13)
-                            .build();
-
-            googleMap.animateCamera(
-                    CameraUpdateFactory.newCameraPosition(cameraPosition),
-                    ANIMATE_SPEEED_TURN,
-                    new GoogleMap.CancelableCallback() {
-
-                        @Override
-                        public void onFinish() {
-                            System.out.println("finished camera");
-                            animator.reset();
-                            Handler handler = new Handler();
-                            handler.post(animator);
-                        }
-
-                        @Override
-                        public void onCancel() {
-                            System.out.println("cancelling camera");
-                        }
-                    }
-            );
         }
 
-        private Polyline polyLine;
-        private PolylineOptions rectOptions = new PolylineOptions().color(Color.GREEN).width(2);;
-
-
-        private Polyline initializePolyLine() {
-            rectOptions.add(markers.get(0).getPosition());
-            return googleMap.addPolyline(rectOptions);
+        private void stopAnimation() {
+            trackingMarker.remove();
+            mHandler.removeCallbacks(animator);
         }
 
-        /**
-         * Add the marker to the polyline.
-         */
-        private void updatePolyLine(LatLng latLng) {
-            List<LatLng> points = polyLine.getPoints();
-            points.add(latLng);
-            polyLine.setPoints(points);
-        }
-
-
-        public void stopAnimation() {
-            animator.stop();
-        }
-
-        public void startAnimation(boolean showPolyLine) {
+        private void startAnimation(boolean showPolyLine) {
             if (markers.size() >= 2) {
                 animator.initialize(showPolyLine);
             }
         }
 
-
         @Override
         public void run() {
 
             long elapsed = SystemClock.uptimeMillis() - start;
-            double t = interpolator.getInterpolation((float) elapsed / ANIMATE_SPEEED);
+            double t = interpolator.getInterpolation((float) elapsed / animate_speed);
 
             double lat = t * endLatLng.latitude + (1 - t) * beginLatLng.latitude;
             double lng = t * endLatLng.longitude + (1 - t) * beginLatLng.longitude;
@@ -306,9 +244,6 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
 
             trackingMarker.setPosition(newPosition);
 
-            if (showPolyline) {
-                updatePolyLine(newPosition);
-            }
             // It's not possible to move the marker + center it through a cameraposition update while another camerapostioning was already happening.
             if (t < 1) {
                 mHandler.postDelayed(this, 16);
@@ -326,27 +261,8 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
 
                     start = SystemClock.uptimeMillis();
 
-                    LatLng begin = getBeginLatLng();
-                    LatLng end = getEndLatLng();
-
-                    float bearingL = bearingBetweenLatLngs(begin, end);
 
                     highLightMarker(currentIndex);
-
-                    CameraPosition cameraPosition =
-                            new CameraPosition.Builder()
-                                    .target(end) // changed this...
-                                    .bearing(bearingL + BEARING_OFFSET)
-                                    .tilt(tilt)
-                                    .zoom(googleMap.getCameraPosition().zoom)
-                                    .build();
-
-
-                    googleMap.animateCamera(
-                            CameraUpdateFactory.newCameraPosition(cameraPosition),
-                            ANIMATE_SPEEED_TURN,
-                            null
-                    );
 
                     start = SystemClock.uptimeMillis();
                     mHandler.postDelayed(animator, 16);
@@ -354,7 +270,7 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
                 } else {
                     currentIndex++;
                     highLightMarker(currentIndex);
-                    stopAnimation();
+                    animator.finalizeStop();
                 }
 
             }
@@ -367,30 +283,98 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
         private LatLng getBeginLatLng() {
             return markers.get(currentIndex).getPosition();
         }
+    }
 
-        private void adjustCameraPosition() {
-            Logger.d(TAG, "tilt = " + tilt);
-            Logger.d(TAG, "upward = " + upward);
-            Logger.d(TAG, "zoom = " + zoom);
-            if (upward) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-                if (tilt < 90) {
-                    tilt++;
-                    zoom -= 0.01f;
-                } else {
-                    upward = false;
-                }
-
-            } else {
-                if (tilt > 0) {
-                    tilt--;
-                    zoom += 0.01f;
-                } else {
-                    upward = true;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.itinerary_menu, menu);
+        MenuItem item = menu.findItem(R.id.spinnerSpeed);
+        mSpeedSpinner = (Spinner) MenuItemCompat.getActionView(item);
+        List<String> speedList = new ArrayList<>(Arrays.asList(mContext.getResources().getStringArray(R.array.speed)));
+        mSpinnerAdapter = new SpinnerAdapter(mContext, R.layout.spinner_item, speedList);
+        mSpeedSpinner.setAdapter(mSpinnerAdapter);
+        int width = getResources().getDimensionPixelSize(R.dimen.dropdown_list_width);
+        int verticalOffset = getResources().getDimensionPixelSize(R.dimen.dropdown_vertical_offset);
+        mSpeedSpinner.setDropDownWidth(width);
+        mSpeedSpinner.setDropDownVerticalOffset(verticalOffset);
+        mSpeedSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                mSpeedSpinner.setSelection(i);
+                mSpinnerAdapter.setSelection(i);
+                if(i == 0){
+                    animator.setAnimateSpeed(100);
+                }else if (i==1){
+                    animator.setAnimateSpeed(200);
+                }else if (i==2){
+                    animator.setAnimateSpeed(300);
+                }else if (i==3){
+                    animator.setAnimateSpeed(400);
+                }else if (i==4){
+                    animator.setAnimateSpeed(500);
+                }else if (i==5){
+                    animator.setAnimateSpeed(600);
+                }else if (i==6){
+                    animator.setAnimateSpeed(800);
+                }else{
+                    animator.setAnimateSpeed(1000);
                 }
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public void showLocationNotFound() {
+        if (!isFinishing()) {
+            CustomDialogBuilder customDialogBuilder = new CustomDialogBuilder(MapInfoActivity.this)
+                    .setMessage("Chưa bật gps để xác định vị trí, xin hãy bật gps lên!")
+                    .setTitle("Chưa tìm được vị trí")
+                    .addLeftButton("ignore", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            finish();
+                        }
+                    })
+                    .addRightButton("settings", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    });
+            Dialog dialog = customDialogBuilder.build();
+            dialog.show();
+        } else {
+            Logger.d(TAG, "NearbyActivity is finishing");
         }
     }
 
-    ;
+    private void showNetworkUnavailable() {
+        CustomDialogBuilder customDialogBuilder = new CustomDialogBuilder(this)
+                .setTitle(R.string.notice)
+                .setMessage(R.string.network_error)
+                .addRightButton(R.string.btn_ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                });
+        customDialogBuilder.build().show();
+    }
 }

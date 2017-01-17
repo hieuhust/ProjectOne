@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity
                 public void onNegativeButtonClick() {
 
                 }
-            });
+            }, true, true);
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);

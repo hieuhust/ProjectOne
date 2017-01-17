@@ -8,11 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppThemeItinerary" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppThemeItinerary" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="colorPrimary">#3F51B5</item>
         <item name="colorPrimaryDark">#303F9F</item>
-        <item name="colorAccent">#FFAB40</item>
+        <item name="colorAccent">@color/colorBlack</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -23,10 +23,28 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="CustomDialog" parent="@android:style/Theme.Dialog">
+
+        <!-- <item name="android:windowFullscreen">true</item> -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:windowMinWidthMajor">80%</item>
+        <item name="android:windowMinWidthMinor">80%</item>
+    </style>
+    <style name="DialogActionText">
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@string/roboto_medium</item>
+        <item name="android:textSize">@dimen/custom_dialog_action_size</item>
+        <item name="android:textColor">@drawable/selector_dialog_action_text_color</item>
+    </style>
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@color/colorMoreGray</item>
     </style>
-
+    <style name="spinnerStyle" parent="android:Widget.TextView.SpinnerItem">
+        <item name="android:popupBackground">@drawable/profile_spinner</item>
+    </style>
 </resources>

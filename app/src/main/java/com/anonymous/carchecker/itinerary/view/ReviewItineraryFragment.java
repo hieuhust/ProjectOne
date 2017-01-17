@@ -1,6 +1,7 @@
 package com.anonymous.carchecker.itinerary.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Button;
 
 import com.anonymous.carchecker.R;
 import com.anonymous.carchecker.common.view.BaseFragment;
+import com.anonymous.carchecker.position.view.MapInfoActivity;
 
 public class ReviewItineraryFragment extends BaseFragment {
 
@@ -43,7 +45,8 @@ public class ReviewItineraryFragment extends BaseFragment {
         btnReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getActivity(), MapInfoActivity.class);
+                getActivity().startActivity(intent);
             }
         });
 

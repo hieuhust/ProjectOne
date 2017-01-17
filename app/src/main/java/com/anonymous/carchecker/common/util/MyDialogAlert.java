@@ -23,19 +23,21 @@ public class MyDialogAlert {
         mContext = context;
     }
 
-    public void show(int title, int message, final DialogListener dialogListener) {
+    public void show(int title, int message, final DialogListener dialogListener, final boolean isShowPositiveButton, final boolean isShowNegativeButton) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setCancelable(false);
         builder.setTitle(title);
         builder.setMessage(message);
+        if(isShowPositiveButton)
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 dialogListener.onPositiveButtonClick();
             }
-        })
-                .setNegativeButton("Cancel ", new DialogInterface.OnClickListener() {
+        });
+        if(isShowNegativeButton)
+        builder.setNegativeButton("Cancel ", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialogListener.onNegativeButtonClick();
