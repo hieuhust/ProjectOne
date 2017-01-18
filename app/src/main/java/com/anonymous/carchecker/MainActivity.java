@@ -3,6 +3,7 @@ package com.anonymous.carchecker;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.anonymous.carchecker.common.data.PreferencesUtil;
 import com.anonymous.carchecker.common.util.CircleTransform;
@@ -34,13 +36,13 @@ public class MainActivity extends BaseActivity
 
     private Toolbar toolbar;
 
-    private Menu mMenu;
-
+    private boolean isDoubleClick = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isDoubleClick = false;
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar_app_bar_main);
         toolbar.setTitle(R.string.position);
@@ -60,7 +62,7 @@ public class MainActivity extends BaseActivity
         Picasso.with(this).load(R.drawable.ic_user).transform(new CircleTransform()).into(avatar);
 
         // Default go to the first fragment containing position info
-        setFragment(R.string.position, PositionInfoFragment.newInstance(1));
+        setFragment(R.string.position, PositionInfoFragment.newInstance());
     }
 
     @Override
@@ -68,7 +70,20 @@ public class MainActivity extends BaseActivity
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (isDoubleClick) {
+                isDoubleClick = false;
+                super.onBackPressed();
+                return;
+            }
+            isDoubleClick = true;
+            Toast.makeText(getApplicationContext(), getString(R.string.inform_press_back_again), Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    isDoubleClick = false;
+                }
+            }, 2000);
         }
     }
 
@@ -76,7 +91,6 @@ public class MainActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the mMenu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        this.mMenu = menu;
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager =
@@ -85,6 +99,18 @@ public class MainActivity extends BaseActivity
                 (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                PositionInfoFragment.newInstance().search(newText.trim());
+                return true;
+            }
+        });
         return true;
     }
 
@@ -110,11 +136,10 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_position) {
-            setFragment(R.string.position, PositionInfoFragment.newInstance(1));
+            setFragment(R.string.position, PositionInfoFragment.newInstance());
         } else if (id == R.id.nav_review_itinerary) {
             setFragment(R.string.review_hanh_trinh, ReviewItineraryFragment.newInstance());
-        }
-        else if(id == R.id.nav_logout){
+        } else if (id == R.id.nav_logout) {
             MyDialogAlert myDialogAlert = new MyDialogAlert(this);
             myDialogAlert.show(R.string.confirm, R.string.logout_msg, new MyDialogAlert.DialogListener() {
                 @Override
@@ -147,8 +172,6 @@ public class MainActivity extends BaseActivity
         //set title for toolbar
         toolbar.setTitle(titleToolbar);
     }
-
-
 
 
 }

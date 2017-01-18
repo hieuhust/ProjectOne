@@ -85,7 +85,8 @@
     <string name="stop">dừng</string>
     <string name="itinerary">hành trình</string>
     <string name="can_not_call_number_msg">Không thể gọi tới số</string>
-    <string name="search_hint">Type and Search</string>
+    <string name="search_hint">Tìm kiếm theo biển số xe</string>
+    <string name="inform_press_back_again">Bấm phím back một lần nữa để thoát chương trình</string>
 
     <string name="location">Vị trí</string>
 

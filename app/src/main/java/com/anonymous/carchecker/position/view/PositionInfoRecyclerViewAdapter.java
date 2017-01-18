@@ -7,13 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anonymous.carchecker.R;
 import com.anonymous.carchecker.position.model.InfoVehicle;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link InfoVehicle} and makes a call to the
@@ -22,16 +23,24 @@ import java.util.List;
  */
 public class PositionInfoRecyclerViewAdapter extends RecyclerView.Adapter<PositionInfoRecyclerViewAdapter.ViewHolder> {
 
-    private final List<InfoVehicle> mValues;
+    private List<InfoVehicle> mInfoVehicles;
+    private List<InfoVehicle> mCachedInfoVehicles;
     private final PositionInfoFragment.OnPositionInfoFragmentInteractionListener mListener;
     private ViewHolder.IViewHolderClick mIViewHolderClick;
     private Context mContext;
 
     public PositionInfoRecyclerViewAdapter(Context context, List<InfoVehicle> items, PositionInfoFragment.OnPositionInfoFragmentInteractionListener listener, ViewHolder.IViewHolderClick iViewHolderClick) {
-        mValues = items;
+        mCachedInfoVehicles = new ArrayList<>();
+        setData(items);
         mListener = listener;
         mIViewHolderClick = iViewHolderClick;
         mContext = context;
+    }
+
+    public void setData(List<InfoVehicle> infoVehicles) {
+        mInfoVehicles = infoVehicles;
+        mCachedInfoVehicles.clear();
+        mCachedInfoVehicles.addAll(mInfoVehicles);
     }
 
     @Override
@@ -44,7 +53,7 @@ public class PositionInfoRecyclerViewAdapter extends RecyclerView.Adapter<Positi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        InfoVehicle infoVehicle = mValues.get(position);
+        InfoVehicle infoVehicle = mInfoVehicles.get(position);
         holder.mItem = infoVehicle;
         holder.mTvStatusFuel.setText(infoVehicle.mCurrentFuel + "/" + infoVehicle.mMaxFuel);
         holder.mTvNumberInvalidSpeed.setText(Integer.toString(infoVehicle.mNumberInvalidSpeed));
@@ -60,7 +69,24 @@ public class PositionInfoRecyclerViewAdapter extends RecyclerView.Adapter<Positi
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mInfoVehicles.size();
+    }
+
+    public void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+
+        mInfoVehicles.clear();
+        if (charText.length() == 0) {
+            mInfoVehicles.addAll(mCachedInfoVehicles);
+
+        } else {
+            for (InfoVehicle infoVehicle : mCachedInfoVehicles) {
+                if (charText.length() != 0 && infoVehicle.mNumberPlates.toLowerCase(Locale.getDefault()).contains(charText)) {
+                    mInfoVehicles.add(infoVehicle);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

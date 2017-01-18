@@ -12,7 +12,8 @@
     <dimen name="dropdown_list_width">70dp</dimen>
     <dimen name="dropdown_vertical_offset">20dp</dimen>
     <dimen name="text_margin_fragment_position_info_item">5dp</dimen>
-    <dimen name="take_care_customer_margin">16dp</dimen>
+
+    <dimen name="take_care_customer_margin">15dp</dimen>
     <!-- Custom Dialog -->
     <dimen name="custom_dialog_title_size">18sp</dimen>
     <dimen name="custom_dialog_message_size">16sp</dimen>
@@ -28,10 +29,6 @@
     <dimen name="custom_dialog_action_height">36dp</dimen>
     <dimen name="profile_dropdown_list_width">116dp</dimen>
     <dimen name="profile_dropdown_vertical_offset">8dp</dimen>
-
     <dimen name="margin_top_navigation">8dp</dimen>
-
-
     <dimen name="margin_16dp">16dp</dimen>
-
 </resources>

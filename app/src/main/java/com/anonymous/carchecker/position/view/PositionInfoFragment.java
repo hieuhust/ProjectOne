@@ -26,10 +26,14 @@ import com.anonymous.carchecker.position.model.InfoVehicle;
 public class PositionInfoFragment extends BaseFragment {
 
     private OnPositionInfoFragmentInteractionListener mListener;
+    private PositionInfoRecyclerViewAdapter positionInfoRecyclerViewAdapter;
+
     private RecyclerView mRecyclerView;
     private TextView mTvNorthPhone;
     private TextView mTvSouthPhone;
     private TextView mTvNumberVehicle;
+
+    private static PositionInfoFragment sPositionInfoFragment;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -38,11 +42,12 @@ public class PositionInfoFragment extends BaseFragment {
     public PositionInfoFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static PositionInfoFragment newInstance(int columnCount) {
-        PositionInfoFragment fragment = new PositionInfoFragment();
-        return fragment;
+    public static PositionInfoFragment newInstance() {
+        if (sPositionInfoFragment != null) {
+            return sPositionInfoFragment;
+        }
+        sPositionInfoFragment = new PositionInfoFragment();
+        return sPositionInfoFragment;
     }
 
     @Override
@@ -77,7 +82,7 @@ public class PositionInfoFragment extends BaseFragment {
         // use a linear layout manager
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        PositionInfoRecyclerViewAdapter positionInfoRecyclerViewAdapter = new PositionInfoRecyclerViewAdapter(getActivity(), DummyContent.ITEMS, mListener, new PositionInfoRecyclerViewAdapter.ViewHolder.IViewHolderClick() {
+        positionInfoRecyclerViewAdapter = new PositionInfoRecyclerViewAdapter(getActivity(), DummyContent.ITEMS, mListener, new PositionInfoRecyclerViewAdapter.ViewHolder.IViewHolderClick() {
             @Override
             public void onCardClick(View view, int position, PositionInfoRecyclerViewAdapter.ViewHolder viewHolder) {
                 // Goto Map info activity
@@ -127,6 +132,12 @@ public class PositionInfoFragment extends BaseFragment {
 
     private void setAdapter(PositionInfoRecyclerViewAdapter positionInfoRecyclerViewAdapter) {
         mRecyclerView.setAdapter(positionInfoRecyclerViewAdapter);
+        mTvNumberVehicle.setText(getString(R.string.number_car) + " " + Integer.toString(positionInfoRecyclerViewAdapter.getItemCount()));
+    }
+
+    public void search(String charText) {
+        positionInfoRecyclerViewAdapter.filter(charText);
+        mRecyclerView.invalidate();
         mTvNumberVehicle.setText(getString(R.string.number_car) + " " + Integer.toString(positionInfoRecyclerViewAdapter.getItemCount()));
     }
 }
