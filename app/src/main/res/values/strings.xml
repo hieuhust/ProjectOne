@@ -113,4 +113,10 @@
     <string name="network_error">Please check your internet connection and try again</string>
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="from_hour">Từ giờ</string>
+    <string name="to_hour">Đến giờ</string>
+    <string name="day">Ngày</string>
+    <string name="number_plate">Biển số</string>
+    <string name="choose_vehicle">Chọn xe</string>
+    <string name="load_data">Tải dữ liệu</string>
 </resources>
