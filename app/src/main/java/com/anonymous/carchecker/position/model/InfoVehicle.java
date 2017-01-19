@@ -2,7 +2,7 @@ package com.anonymous.carchecker.position.model;
 
 import com.anonymous.carchecker.R;
 import com.anonymous.carchecker.common.model.DataModel;
-import com.anonymous.carchecker.common.model.StatusVehicle;
+import com.anonymous.carchecker.common.model.StatusVehicleType;
 
 /**
  * Created by Huy Hieu on 1/16/2017.
@@ -39,7 +39,7 @@ public class InfoVehicle extends DataModel {
     }
 
     public int getDrawableByStatus() {
-        StatusVehicle status = StatusVehicle.values()[mCurrentStatus];
+        StatusVehicleType status = StatusVehicleType.values()[mCurrentStatus];
         switch (status) {
             case PAUSE:
                 return R.drawable.doxe_icon;

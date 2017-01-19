@@ -36,7 +36,7 @@
     <string name="report">Báo cáo</string>
 
     <string name="report_qcvn31">Báo cáo QCVN31</string>
-    <string name="hanh_trinh">Hàng trình</string>
+    <string name="hanh_trinh">Hành trình</string>
     <string name="speed">Tốc độ</string>
     <string name="over_speed">Quá tốc độ</string>
     <string name="drive_time">Thời gian lái</string>
@@ -119,4 +119,6 @@
     <string name="number_plate">Biển số</string>
     <string name="choose_vehicle">Chọn xe</string>
     <string name="load_data">Tải dữ liệu</string>
+    <string name="hint_search_number_plate">Tìm xe</string>
+    <string name="prompt_choose_vehicle">Hãy chọn xe</string>
 </resources>

@@ -2,41 +2,40 @@ package com.anonymous.carchecker.common.util;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
-
-import java.util.Calendar;
+import android.widget.TimePicker;
 
 /**
  * Created by Huy Hieu on 1/18/2017.
  */
 
-public class MyCalendarDialog extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+public class MyTimeDialog extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
     public interface DataReturnListener {
-        void onDataReturn(int year, int month, int dayOfMonth);
+        void onDataReturn(int hour, int minute);
     }
 
-    public final static String DATE_PICKER = "datePicker";
+    public final static String TIME_PICKER = "timePicker";
 
-    public static final String FORMAT = "yyyy/MM/dd";
+    public static final String FORMAT = "hh:mm";
 
     private final static String DATE_STRING_ARGUMENT = "date";
 
     private DataReturnListener mDataReturnListener;
 
-    private int year, month, dayOfMonth;
     private boolean mIsClick = false;
 
-    public MyCalendarDialog() {
+    public MyTimeDialog() {
         mIsClick = false;
     }
 
-    public static MyCalendarDialog newInstance(String textCalendar) {
-        MyCalendarDialog myCalendarDialog = new MyCalendarDialog();
+    public static MyTimeDialog newInstance(String textCalendar) {
+        MyTimeDialog myCalendarDialog = new MyTimeDialog();
         Bundle bundle = new Bundle();
         bundle.putString(DATE_STRING_ARGUMENT, textCalendar);
         myCalendarDialog.setArguments(bundle);
@@ -52,28 +51,27 @@ public class MyCalendarDialog extends DialogFragment implements DatePickerDialog
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String date = getArguments().getString(DATE_STRING_ARGUMENT);
 
-        //parse date string to day,month, year with format "yyyy/MM/dd"
-        String[] data = date.split("/");
-        int year = Integer.parseInt(data[0]);
-        int month = Integer.parseInt(data[1]);
-        int day = Integer.parseInt(data[2]);
+        //parse time string to hour,minute with format "hh:mm"
+        String[] data = date.split(":");
+        int hour = Integer.parseInt(data[0]);
+        int minute = Integer.parseInt(data[1]);
 
         // Create a new instance of DatePickerDialog and return it
-        // issue due to we have to -1 in month var
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), this, year, month - 1, day);
-        datePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), this, hour, minute, true);
+        timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mIsClick = true;
             }
         });
-        return datePickerDialog;
+        return timePickerDialog;
     }
 
     @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         if (mIsClick) {
-            mDataReturnListener.onDataReturn(year, month, dayOfMonth);
+            mDataReturnListener.onDataReturn(hourOfDay,minute);
         }
     }
+
 }

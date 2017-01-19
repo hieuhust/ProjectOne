@@ -32,4 +32,5 @@
     <dimen name="margin_top_navigation">8dp</dimen>
     <dimen name="margin_16dp">16dp</dimen>
     <dimen name="padding_table_30dp">30dp</dimen>
+    <dimen name="margin_of_row_review_itinerary_fragment">5dp</dimen>
 </resources>

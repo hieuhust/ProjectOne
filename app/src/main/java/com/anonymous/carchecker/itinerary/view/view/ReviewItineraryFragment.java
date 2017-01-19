@@ -1,30 +1,26 @@
-package com.anonymous.carchecker.itinerary.view;
+package com.anonymous.carchecker.itinerary.view.view;
 
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anonymous.carchecker.R;
 import com.anonymous.carchecker.common.util.MyCalendarDialog;
+import com.anonymous.carchecker.common.util.MyTimeDialog;
 import com.anonymous.carchecker.common.view.BaseFragment;
+import com.anonymous.carchecker.itinerary.view.data.DummyContentLogStatus;
 import com.anonymous.carchecker.position.view.MapInfoActivity;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-
-import static com.anonymous.carchecker.R.string.day;
 
 public class ReviewItineraryFragment extends BaseFragment {
 
-    private final static String DATE_PICKER = "datePicker";
 
     private static ReviewItineraryFragment sReviewItineraryFragment;
 
@@ -34,9 +30,11 @@ public class ReviewItineraryFragment extends BaseFragment {
     private TextView tvToHour;
     private TextView tvDate;
     private TextView tvNumberPlate;
+    private RecyclerView recyclerView;
+    private LogDataRecyclerViewAdapter mLogDataRecyclerViewAdapter;
 
     private MyCalendarDialog myCalendarDialog;
-
+    private MyTimeDialog myTimeDialog;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -67,6 +65,7 @@ public class ReviewItineraryFragment extends BaseFragment {
 
     private void initView(View view) {
         btnReview = (Button) view.findViewById(R.id.btn_review_fragment_itinerary);
+        btnReview.setEnabled(false);
         btnReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,7 +79,14 @@ public class ReviewItineraryFragment extends BaseFragment {
         btnLoadData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (getString(R.string.choose_vehicle).equals(tvNumberPlate.getText().toString())) {
+                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.prompt_choose_vehicle), Toast.LENGTH_SHORT).show();
+                } else {
+                    mLogDataRecyclerViewAdapter.addData(DummyContentLogStatus.ITEMS);
+                    if (DummyContentLogStatus.ITEMS.size() != 0) {
+                        btnReview.setEnabled(true);
+                    }
+                }
             }
         });
 
@@ -89,7 +95,14 @@ public class ReviewItineraryFragment extends BaseFragment {
         tvFromHour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                myTimeDialog = MyTimeDialog.newInstance(tvFromHour.getText().toString());
+                myTimeDialog.setDataReturnListener(new MyTimeDialog.DataReturnListener() {
+                    @Override
+                    public void onDataReturn(int hour, int minute) {
+                        setTimeForTextView(tvFromHour, hour, minute);
+                    }
+                });
+                myTimeDialog.show(getActivity().getSupportFragmentManager(), MyTimeDialog.TIME_PICKER);
             }
         });
 
@@ -97,7 +110,14 @@ public class ReviewItineraryFragment extends BaseFragment {
         tvToHour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                myTimeDialog = MyTimeDialog.newInstance(tvToHour.getText().toString());
+                myTimeDialog.setDataReturnListener(new MyTimeDialog.DataReturnListener() {
+                    @Override
+                    public void onDataReturn(int hour, int minute) {
+                        setTimeForTextView(tvToHour, hour, minute);
+                    }
+                });
+                myTimeDialog.show(getActivity().getSupportFragmentManager(), MyTimeDialog.TIME_PICKER);
             }
         });
 
@@ -106,18 +126,14 @@ public class ReviewItineraryFragment extends BaseFragment {
         tvDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myCalendarDialog = new MyCalendarDialog();
+                myCalendarDialog = MyCalendarDialog.newInstance(tvDate.getText().toString());
                 myCalendarDialog.setDataReturnListener(new MyCalendarDialog.DataReturnListener() {
                     @Override
-                    public void onDataReturn(DatePicker view, int year, int month, int dayOfMonth) {
-                        String myFormat = "yyyy/MM/dd";
-                        SimpleDateFormat sdformat = new SimpleDateFormat(myFormat, Locale.US);
-                        Calendar c = Calendar.getInstance();
-                        c.set(year, month, dayOfMonth);
-                        tvDate.setText(sdformat.format(c.getTime()));
+                    public void onDataReturn(int year, int month, int dayOfMonth) {
+                        setDateForTextView(tvDate, year, month, dayOfMonth);
                     }
                 });
-                myCalendarDialog.show(getActivity().getSupportFragmentManager(), DATE_PICKER);
+                myCalendarDialog.show(getActivity().getSupportFragmentManager(), MyCalendarDialog.DATE_PICKER);
             }
         });
 
@@ -126,11 +142,26 @@ public class ReviewItineraryFragment extends BaseFragment {
         tvNumberPlate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                VehicleListDialog vehicleListDialog = VehicleListDialog.newInstance();
+                vehicleListDialog.setDataReturnListener(new VehicleListDialog.DataReturnListener() {
+                    @Override
+                    public void onDataReturn(String numberPlateName) {
+                        tvNumberPlate.setText(numberPlateName);
+                    }
+                });
+                vehicleListDialog.show(getActivity().getSupportFragmentManager(), VehicleListDialog.TAG);
             }
         });
-    }
 
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_fragment_itinerary);
+        // use a linear layout manager
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mLogDataRecyclerViewAdapter = new LogDataRecyclerViewAdapter(getActivity());
+
+        //specify an adapter
+        recyclerView.setAdapter(mLogDataRecyclerViewAdapter);
+
+    }
 
     @Override
     public void onAttach(Context context) {

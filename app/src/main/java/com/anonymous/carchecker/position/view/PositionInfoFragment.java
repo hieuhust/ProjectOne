@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.anonymous.carchecker.R;
-import com.anonymous.carchecker.itinerary.view.LocationInfoMapActivity;
+import com.anonymous.carchecker.itinerary.view.view.LocationInfoMapActivity;
 import com.anonymous.carchecker.common.util.PhoneUtil;
 import com.anonymous.carchecker.common.view.BaseFragment;
 import com.anonymous.carchecker.position.data.DummyContent;

@@ -70,7 +70,7 @@
             android:theme="@style/AppThemeItinerary" />
 
         <activity
-            android:name=".itinerary.view.LocationInfoMapActivity"
+            android:name=".itinerary.view.view.LocationInfoMapActivity"
             android:theme="@style/AppThemeItinerary" />
     </application>
 

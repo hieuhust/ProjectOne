@@ -20,7 +20,7 @@ import com.anonymous.carchecker.common.util.CircleTransform;
 import com.anonymous.carchecker.common.util.MyDialogAlert;
 import com.anonymous.carchecker.common.view.BaseActivity;
 import com.anonymous.carchecker.common.view.BaseFragment;
-import com.anonymous.carchecker.itinerary.view.ReviewItineraryFragment;
+import com.anonymous.carchecker.itinerary.view.view.ReviewItineraryFragment;
 import com.anonymous.carchecker.login.model.Account;
 import com.anonymous.carchecker.login.view.LoginActivity;
 import com.anonymous.carchecker.position.model.InfoVehicle;
