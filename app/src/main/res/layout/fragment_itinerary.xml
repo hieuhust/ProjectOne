@@ -160,7 +160,6 @@
                 android:clickable="true"
                 android:text="@string/choose_vehicle"
                 android:textColor="@drawable/selector_action_textview_color"
-                android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
                 android:textAppearance="?attr/textAppearanceListItem" />
         </TableRow>
 
