@@ -1,6 +1,6 @@
 package com.anonymous.carchecker.position.data;
 
-import com.anonymous.carchecker.common.model.StatusVehicle;
+import com.anonymous.carchecker.common.model.StatusVehicleType;
 import com.anonymous.carchecker.position.model.InfoVehicle;
 
 import java.util.ArrayList;
@@ -43,8 +43,8 @@ public class DummyContent {
     private static InfoVehicle createInfoVehicle(int position) {
         int id = position;
         int index = position % 3;
-        int mCurrentStatus = StatusVehicle.values()[index].ordinal();
-        String mNumberPlates = "18H123333";
+        int mCurrentStatus = StatusVehicleType.values()[index].ordinal();
+        String mNumberPlates = position + "8H3333";
         String mDetailCurrentStatus = "Dừng 12'";
         String mCurrentPosition = "Lương Thế Vinh,Nguyễn Trãi, Thanh Xuân, Hà Nội";
         int mCurrentSpeed = 50;

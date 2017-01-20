@@ -36,7 +36,7 @@
     <string name="report">Báo cáo</string>
 
     <string name="report_qcvn31">Báo cáo QCVN31</string>
-    <string name="hanh_trinh">Hàng trình</string>
+    <string name="hanh_trinh">Hành trình</string>
     <string name="speed">Tốc độ</string>
     <string name="over_speed">Quá tốc độ</string>
     <string name="drive_time">Thời gian lái</string>
@@ -85,7 +85,8 @@
     <string name="stop">dừng</string>
     <string name="itinerary">hành trình</string>
     <string name="can_not_call_number_msg">Không thể gọi tới số</string>
-    <string name="search_hint">Type and Search</string>
+    <string name="search_hint">Tìm kiếm theo biển số xe</string>
+    <string name="inform_press_back_again">Bấm phím back một lần nữa để thoát chương trình</string>
 
     <string name="location">Vị trí</string>
 
@@ -112,4 +113,12 @@
     <string name="network_error">Please check your internet connection and try again</string>
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="from_hour">Từ giờ</string>
+    <string name="to_hour">Đến giờ</string>
+    <string name="day">Ngày</string>
+    <string name="number_plate">Biển số</string>
+    <string name="choose_vehicle">Chọn xe</string>
+    <string name="load_data">Tải dữ liệu</string>
+    <string name="hint_search_number_plate">Tìm xe</string>
+    <string name="prompt_choose_vehicle">Hãy chọn xe</string>
 </resources>

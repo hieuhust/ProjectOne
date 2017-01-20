@@ -13,7 +13,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="1.5"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
         android:gravity="center_horizontal">
         <ImageView
             android:layout_width="wrap_content"
@@ -68,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/take_care_customer_margin"
-        android:layout_weight="3"
+        android:layout_weight="2"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 

@@ -17,10 +17,6 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/nav_manage_sub_account"
-                    android:icon="@drawable/ic_menu_user"
-                    android:title="@string/manage_sub_account" />
-                <item
                     android:id="@+id/nav_company_info"
                     android:icon="@drawable/ic_menu_building"
                     android:title="@string/company_info" />

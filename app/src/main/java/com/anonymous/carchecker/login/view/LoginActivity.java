@@ -151,6 +151,7 @@ public class LoginActivity extends BaseActivity {
 
                 //Goto MainActivity
                 gotoActivity(MainActivity.class);
+                myProgressDialog.hide();
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
