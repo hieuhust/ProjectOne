@@ -27,13 +27,14 @@ import com.anonymous.carchecker.R;
 import com.anonymous.carchecker.common.ApplicationUtil;
 import com.anonymous.carchecker.common.CustomDialogBuilder;
 import com.anonymous.carchecker.common.logger.Logger;
-import com.anonymous.carchecker.common.util.MyDialogAlert;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -55,6 +56,7 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
     private Context mContext;
     private PolylineOptions mRectOptions = new PolylineOptions().color(Color.BLUE).width(5);
     private boolean mIsMapReady;
+    private boolean mIsFirstWatchPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,19 +86,20 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
             mBtWatchButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mIsMapReady){
+                    if (mIsMapReady) {
                         if (mIsWatched) {
                             mBtWatchButton.setText(mContext.getString(R.string.watch));
                             mBtWatchButton.setBackgroundResource(R.drawable.xem_button);
                             mIsWatched = false;
-                            animator.stopAnimation();
+                            Logger.d(TAG, "Press Stop");
                         } else {
                             mBtWatchButton.setText(mContext.getString(R.string.stop));
                             mBtWatchButton.setBackgroundResource(R.drawable.dung_button);
                             mIsWatched = true;
                             animator.startAnimation(true);
+                            Logger.d(TAG, "Press watch");
                         }
-                    }else{
+                    } else {
                         Toast.makeText(mContext, "bản đồ chưa sẵn sàng, hãy đợi ít phút!!", Toast.LENGTH_LONG);
                     }
                 }
@@ -111,7 +114,14 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
         this.googleMap = googleMap;
 
         addDefaultLocations();
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markers.get(0).getPosition(), 13));
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (Marker marker : markers) {
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+        int padding = 0; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        googleMap.animateCamera(cu);
     }
 
     private void addDefaultLocations() {
@@ -179,17 +189,15 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
         LatLng endLatLng = null;
         LatLng beginLatLng = null;
 
-        boolean showPolyline = false;
 
         private Marker trackingMarker;
 
         private void reset() {
             resetMarkers();
-            start = SystemClock.uptimeMillis();
             currentIndex = 0;
+            start = SystemClock.uptimeMillis();
             endLatLng = getEndLatLng();
             beginLatLng = getBeginLatLng();
-
         }
 
         private void finalizeStop() {
@@ -200,56 +208,13 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
             mIsWatched = false;
         }
 
-        private void setAnimateSpeed (int speed) {
+        private void setAnimateSpeed(int speed) {
             animate_speed = speed;
         }
 
-        private void initialize(boolean showPolyLine) {
-            reset();
-            this.showPolyline = showPolyLine;
-
-            LatLng markerPos = markers.get(0).getPosition();
-
-            trackingMarker = googleMap.addMarker(new MarkerOptions().position(markerPos)
-                    .title("car")
-                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.carr))
-                    .snippet("car"));
-            animator.reset();
-            highLightMarker(0);
-            Handler handler = new Handler();
-            handler.post(animator);
-
-        }
-
-        private void stopAnimation() {
-            trackingMarker.remove();
-            mHandler.removeCallbacks(animator);
-        }
-
-        private void startAnimation(boolean showPolyLine) {
-            if (markers.size() >= 2) {
-                animator.initialize(showPolyLine);
-            }
-        }
-
-        @Override
-        public void run() {
-
-            long elapsed = SystemClock.uptimeMillis() - start;
-            double t = interpolator.getInterpolation((float) elapsed / animate_speed);
-
-            double lat = t * endLatLng.latitude + (1 - t) * beginLatLng.latitude;
-            double lng = t * endLatLng.longitude + (1 - t) * beginLatLng.longitude;
-            LatLng newPosition = new LatLng(lat, lng);
-
-            trackingMarker.setPosition(newPosition);
-
-            // It's not possible to move the marker + center it through a cameraposition update while another camerapostioning was already happening.
-            if (t < 1) {
-                mHandler.postDelayed(this, 16);
-            } else {
-
-                Logger.d(TAG, "Move to next marker.... current = " + currentIndex + " and size = " + markers.size());
+        private void initialize() {
+            if (mIsFirstWatchPressed && mIsWatched) {
+                Logger.d(TAG, "mIsFirstWatchPressed = true + Move to next marker.... current = " + currentIndex + " and size = " + markers.size());
                 // imagine 5 elements -  0|1|2|3|4 currentindex must be smaller than 4
                 if (currentIndex < markers.size() - 2) {
 
@@ -257,22 +222,87 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
 
                     endLatLng = getEndLatLng();
                     beginLatLng = getBeginLatLng();
-
-
-                    start = SystemClock.uptimeMillis();
-
-
+                    trackingMarker.setIcon(BitmapDescriptorFactory.fromResource(getCarDirections(beginLatLng, endLatLng)));
                     highLightMarker(currentIndex);
-
                     start = SystemClock.uptimeMillis();
-                    mHandler.postDelayed(animator, 16);
+                    if (mIsWatched)
+                        mHandler.postDelayed(animator, 16);
 
                 } else {
                     currentIndex++;
                     highLightMarker(currentIndex);
                     animator.finalizeStop();
                 }
+            } else {
+                reset();
+                mIsFirstWatchPressed = true;
+                LatLng markerPos = markers.get(0).getPosition();
 
+                trackingMarker = googleMap.addMarker(new MarkerOptions().position(markerPos)
+                        .title("car")
+                        .anchor(0.5f, 0.5f)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_down))
+                        .snippet("car"));
+                trackingMarker.setIcon(BitmapDescriptorFactory.fromResource(getCarDirections(beginLatLng, endLatLng)));
+                highLightMarker(0);
+                mHandler.post(animator);
+                Logger.d(TAG, "first start : trackingMarker = " + trackingMarker);
+            }
+        }
+
+        private void stopAnimation() {
+            mHandler.removeCallbacks(animator);
+        }
+
+        private void startAnimation(boolean showPolyLine) {
+            Logger.d(TAG, "startAnimation markers list size = " + markers.size());
+            if (markers.size() >= 2) {
+                animator.initialize();
+            }
+        }
+
+        @Override
+        public void run() {
+            if (mIsWatched) {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                double t = interpolator.getInterpolation((float) elapsed / animate_speed);
+
+                double lat = t * endLatLng.latitude + (1 - t) * beginLatLng.latitude;
+                double lng = t * endLatLng.longitude + (1 - t) * beginLatLng.longitude;
+                LatLng newPosition = new LatLng(lat, lng);
+                trackingMarker.setIcon(BitmapDescriptorFactory.fromResource(getCarDirections(beginLatLng, endLatLng)));
+//            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+//            builder.include(beginLatLng);
+//            builder.include(endLatLng);
+//            builder.include(trackingMarker.getPosition());
+//            LatLngBounds bounds = builder.build();
+//            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+                trackingMarker.setPosition(newPosition);
+
+                // It's not possible to move the marker + center it through a cameraposition update while another camerapostioning was already happening.
+                if (t < 1) {
+                        mHandler.postDelayed(this, 16);
+                } else {
+                    Logger.d(TAG, "Move to next marker.... current = " + currentIndex + " and size = " + markers.size());
+                    if (currentIndex < markers.size() - 2) {
+
+                        currentIndex++;
+
+                        endLatLng = getEndLatLng();
+                        beginLatLng = getBeginLatLng();
+                        trackingMarker.setIcon(BitmapDescriptorFactory.fromResource(getCarDirections(beginLatLng, endLatLng)));
+                        highLightMarker(currentIndex);
+                        start = SystemClock.uptimeMillis();
+
+                        mHandler.postDelayed(animator, 16);
+
+                    } else {
+                        currentIndex++;
+                        highLightMarker(currentIndex);
+                        animator.finalizeStop();
+                        mIsFirstWatchPressed = false;
+                    }
+                }
             }
         }
 
@@ -314,22 +344,24 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 mSpeedSpinner.setSelection(i);
                 mSpinnerAdapter.setSelection(i);
-                if(i == 0){
+                if (i == 0) {
                     animator.setAnimateSpeed(100);
-                }else if (i==1){
+                } else if (i == 1) {
                     animator.setAnimateSpeed(200);
-                }else if (i==2){
+                } else if (i == 2) {
                     animator.setAnimateSpeed(300);
-                }else if (i==3){
+                } else if (i == 3) {
                     animator.setAnimateSpeed(400);
-                }else if (i==4){
+                } else if (i == 4) {
                     animator.setAnimateSpeed(500);
-                }else if (i==5){
+                } else if (i == 5) {
                     animator.setAnimateSpeed(600);
-                }else if (i==6){
+                } else if (i == 6) {
                     animator.setAnimateSpeed(800);
-                }else{
+                } else if (i == 7) {
                     animator.setAnimateSpeed(1000);
+                } else {
+                    animator.setAnimateSpeed(2000);
                 }
             }
 
@@ -376,5 +408,90 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
                     }
                 });
         customDialogBuilder.build().show();
+    }
+
+    private int getCarDirections(LatLng startMarker, LatLng endMarker) {
+        int angle = getAngle(startMarker, endMarker);
+        Logger.d(TAG, "angle = " + angle);
+        if (angle == 270) {
+            Logger.d(TAG, "KienAn: R.drawable.car_down");
+            return R.drawable.car_down;
+        }
+        if (angle > 225 && angle < 270) {
+            Logger.d(TAG, "KienAn: R.drawable.car_left_down_down");
+            return R.drawable.car_left_down_down;
+        }
+        if (angle == 225) {
+            Logger.d(TAG, "KienAn: R.drawable.car_left_down");
+            return R.drawable.car_left_down;
+        }
+        if (angle > 180 && angle < 225) {
+            Logger.d(TAG, "KienAn: R.drawable.car_left_down_left");
+            return R.drawable.car_left_down_left;
+        }
+        if (angle == 180) {
+            Logger.d(TAG, "KienAn: R.drawable.car_left ");
+            return R.drawable.car_left;
+        }
+        if (angle > 135 && angle < 180) {
+            Logger.d(TAG, "KienAn: R.drawable.car_left_up_left");
+            return R.drawable.car_left_up_left;
+        }
+        if (angle == 135) {
+            Logger.d(TAG, "KienAn: R.drawable.car_left_up");
+            return R.drawable.car_left_up;
+        }
+        if (angle > 90 && angle < 135) {
+            Logger.d(TAG, "KienAn: R.drawable.car_left_up_up");
+            return R.drawable.car_left_up_up;
+        }
+        if (angle == 90) {
+            Logger.d(TAG, "KienAn: R.drawable.car_up");
+            return R.drawable.car_up;
+        }
+        if (angle > 45 && angle < 90) {
+            Logger.d(TAG, "KienAn: R.drawable.car_right_up_up");
+            return R.drawable.car_right_up_up;
+        }
+        if (angle > 0 && angle < 45) {
+            Logger.d(TAG, "KienAn: R.drawable.car_right_up_right");
+            return R.drawable.car_right_up_right;
+        }
+        if (angle == 45) {
+            Logger.d(TAG, "KienAn: R.drawable.car_right_up");
+            return R.drawable.car_right_up;
+        }
+        if (angle == 0) {
+            Logger.d(TAG, "KienAn: R.drawable.car_right");
+            return R.drawable.car_right;
+        }
+        if (angle > 315 && angle < 360) {
+            Logger.d(TAG, "KienAn: R.drawable.car_right_down_right");
+            return R.drawable.car_right_down_right;
+        }
+        if (angle > 270 && angle < 315) {
+            Logger.d(TAG, "KienAn: R.drawable.car_right_down_down");
+            return R.drawable.car_right_down_down;
+        }
+        if (angle == 315) {
+            Logger.d(TAG, "KienAn: R.drawable.car_right_down");
+            return R.drawable.car_right_down;
+        }
+
+        return R.drawable.car_down;
+    }
+
+    private double abs(double x) {
+        return x < 0 ? (-x) : x;
+    }
+
+    public int getAngle(LatLng start, LatLng target) {
+        float angle = (float) Math.toDegrees(Math.atan2(target.latitude - start.latitude, target.longitude - start.longitude));
+
+        if (angle < 0) {
+            angle += 360;
+        }
+
+        return (int) angle;
     }
 }
