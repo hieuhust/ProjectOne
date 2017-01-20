@@ -54,7 +54,7 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
     private Spinner mSpeedSpinner;
     private SpinnerAdapter mSpinnerAdapter;
     private Context mContext;
-    private PolylineOptions mRectOptions = new PolylineOptions().color(Color.BLUE).width(5);
+    private PolylineOptions mRectOptions = new PolylineOptions().color(Color.BLUE).width(3);
     private boolean mIsMapReady;
     private boolean mIsFirstWatchPressed;
 
@@ -109,19 +109,23 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         mIsMapReady = true;
         this.googleMap = googleMap;
-
         addDefaultLocations();
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (Marker marker : markers) {
-            builder.include(marker.getPosition());
-        }
-        LatLngBounds bounds = builder.build();
-        int padding = 0; // offset from edges of the map in pixels
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-        googleMap.animateCamera(cu);
+        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                for (Marker marker : markers) {
+                    builder.include(marker.getPosition());
+                }
+                LatLngBounds bounds = builder.build();
+                int padding = 0; // offset from edges of the map in pixels
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                googleMap.animateCamera(cu);
+            }
+        });
     }
 
     private void addDefaultLocations() {
