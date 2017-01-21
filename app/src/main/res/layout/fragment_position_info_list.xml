@@ -33,7 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:text="@string/contact" />
 
         <TextView
@@ -60,7 +60,7 @@
             android:id="@+id/number_vehicle_fragment_position_info_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1.5"
             android:gravity="center"
             android:text="@string/number_car" />
 

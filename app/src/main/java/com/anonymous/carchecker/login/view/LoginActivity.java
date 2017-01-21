@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.anonymous.carchecker.MainActivity;
 import com.anonymous.carchecker.R;
 import com.anonymous.carchecker.common.data.PreferencesUtil;
 import com.anonymous.carchecker.common.util.MyProgressDialog;
+import com.anonymous.carchecker.common.util.PhoneUtil;
 import com.anonymous.carchecker.common.view.BaseActivity;
 import com.anonymous.carchecker.login.model.Account;
 
@@ -30,6 +32,7 @@ public class LoginActivity extends BaseActivity {
     private EditText mUserView;
     private EditText mPasswordView;
     private MyProgressDialog myProgressDialog;
+    private TextView mTvNorthPhone, mTvSouthPhone, mTvHotline;
 
     private Account mAccount = null;
 
@@ -42,6 +45,29 @@ public class LoginActivity extends BaseActivity {
         mUserView = (EditText) findViewById(R.id.user);
 
         mPasswordView = (EditText) findViewById(R.id.password);
+
+        mTvNorthPhone = (TextView) findViewById(R.id.tv_north_phone);
+        mTvNorthPhone.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PhoneUtil.call(LoginActivity.this, mTvNorthPhone.getText().toString());
+            }
+        });
+
+        mTvSouthPhone = (TextView) findViewById(R.id.tv_south_phone);
+        mTvSouthPhone.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PhoneUtil.call(LoginActivity.this, mTvSouthPhone.getText().toString());
+            }
+        });
+        mTvHotline = (TextView) findViewById(R.id.tv_hotline_numberic);
+        mTvHotline.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PhoneUtil.call(LoginActivity.this, mTvHotline.getText().toString());
+            }
+        });
 
         Button mSignInButton = (Button) findViewById(R.id.login_activity_login);
         mSignInButton.setOnClickListener(new OnClickListener() {

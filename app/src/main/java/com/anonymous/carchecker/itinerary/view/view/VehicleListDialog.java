@@ -57,7 +57,6 @@ public class VehicleListDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        setCancelable(false);
         View v = getActivity().getLayoutInflater().inflate(R.layout.number_plate_list, null);
         mSearch = (EditText) v.findViewById(R.id.search_number_plate_list);
         mSearch.addTextChangedListener(new TextWatcher() {

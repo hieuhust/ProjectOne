@@ -27,7 +27,7 @@
     <string name="contact">Liên hệ: </string>
     <string name="mien_bac">Miền Bắc</string>
     <string name="mien_nam">Miền Nam</string>
-    <string name="number_car">Số xe:</string>
+    <string name="number_car">Số xe: 120</string>
 
 
     <!-- Menu of NavigationView -->
