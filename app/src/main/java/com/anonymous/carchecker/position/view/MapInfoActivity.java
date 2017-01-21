@@ -79,10 +79,6 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
             actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         }
 
-        if (!ApplicationUtil.isNetworkAvailable(mContext)) {
-            Logger.d(TAG, "network errors");
-            showNetworkUnavailable();
-        } else {
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mBtWatchButton = (Button) findViewById(R.id.mWatchButton);
@@ -109,7 +105,6 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
                 }
             });
             mapFragment.getMapAsync(this);
-        }
     }
 
     @Override

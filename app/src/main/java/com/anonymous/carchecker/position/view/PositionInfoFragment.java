@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anonymous.carchecker.R;
+import com.anonymous.carchecker.common.ApplicationUtil;
 import com.anonymous.carchecker.itinerary.view.view.LocationInfoMapActivity;
 import com.anonymous.carchecker.common.util.PhoneUtil;
 import com.anonymous.carchecker.common.view.BaseFragment;
@@ -85,10 +87,14 @@ public class PositionInfoFragment extends BaseFragment {
         positionInfoRecyclerViewAdapter = new PositionInfoRecyclerViewAdapter(getActivity(), DummyContent.ITEMS, mListener, new PositionInfoRecyclerViewAdapter.ViewHolder.IViewHolderClick() {
             @Override
             public void onCardClick(View view, int position, PositionInfoRecyclerViewAdapter.ViewHolder viewHolder) {
-                // Goto Map info activity
-                Intent intent = new Intent(getActivity(), LocationInfoMapActivity.class);
-                getActivity().startActivity(intent);
-
+                Context context = getContext();
+                if(!ApplicationUtil.isNetworkAvailable(context)){
+                    Toast.makeText(context, R.string.network_error, Toast.LENGTH_LONG).show();
+                } else {
+                    // Goto Map info activity
+                    Intent intent = new Intent(getActivity(), LocationInfoMapActivity.class);
+                    getActivity().startActivity(intent);
+                }
             }
         });
 
