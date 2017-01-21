@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.anonymous.carchecker.R;
 import com.anonymous.carchecker.common.ApplicationUtil;
-import com.anonymous.carchecker.itinerary.view.view.LocationInfoMapActivity;
 import com.anonymous.carchecker.common.util.PhoneUtil;
 import com.anonymous.carchecker.common.view.BaseFragment;
 import com.anonymous.carchecker.position.data.DummyContent;

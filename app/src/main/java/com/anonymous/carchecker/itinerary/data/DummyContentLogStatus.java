@@ -1,8 +1,6 @@
-package com.anonymous.carchecker.itinerary.view.data;
+package com.anonymous.carchecker.itinerary.data;
 
-import com.anonymous.carchecker.common.model.StatusVehicleType;
-import com.anonymous.carchecker.itinerary.view.model.VehicleStatus;
-import com.anonymous.carchecker.position.model.InfoVehicle;
+import com.anonymous.carchecker.itinerary.model.VehicleStatus;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.anonymous.carchecker.itinerary.view.view;
+package com.anonymous.carchecker.position.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

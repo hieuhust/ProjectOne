@@ -1,4 +1,4 @@
-package com.anonymous.carchecker.itinerary.view.view;
+package com.anonymous.carchecker.itinerary.view;
 
 import android.app.Dialog;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.anonymous.carchecker.itinerary.view.view;
+package com.anonymous.carchecker.itinerary.view;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,8 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.anonymous.carchecker.R;
-import com.anonymous.carchecker.itinerary.view.model.VehicleStatus;
-import com.anonymous.carchecker.position.model.InfoVehicle;
+import com.anonymous.carchecker.itinerary.model.VehicleStatus;
 
 import java.util.ArrayList;
 import java.util.List;

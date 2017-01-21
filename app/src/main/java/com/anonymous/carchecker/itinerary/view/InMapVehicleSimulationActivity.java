@@ -1,4 +1,4 @@
-package com.anonymous.carchecker.position.view;
+package com.anonymous.carchecker.itinerary.view;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -24,12 +24,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.anonymous.carchecker.R;
-import com.anonymous.carchecker.common.ApplicationUtil;
 import com.anonymous.carchecker.common.CustomDialogBuilder;
 import com.anonymous.carchecker.common.data.PreferencesUtil;
 import com.anonymous.carchecker.common.logger.Logger;
-import com.anonymous.carchecker.login.model.Account;
-import com.anonymous.carchecker.login.view.LoginActivity;
+import com.anonymous.carchecker.position.view.SpinnerAdapter;
 import com.anonymous.carchecker.position.view.model.SpeedModel;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -47,8 +45,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCallback {
-    private static final String TAG = "MapInfoActivity";
+public class InMapVehicleSimulationActivity extends AppCompatActivity implements OnMapReadyCallback {
+    private static final String TAG = "InMapVehicleSimulationActivity";
     private List<Marker> markers = new ArrayList<>();
     private GoogleMap googleMap;
     private final Handler mHandler = new Handler();
@@ -371,7 +369,7 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
                 mSpeedSpinner.setSelection(i);
                 mSpinnerAdapter.setSelection(i);
                 SpeedModel speedModel = new SpeedModel(i);
-                PreferencesUtil preferencesUtil = PreferencesUtil.newInstance(MapInfoActivity.this);
+                PreferencesUtil preferencesUtil = PreferencesUtil.newInstance(InMapVehicleSimulationActivity.this);
                 preferencesUtil.setDataModel(speedModel, SpeedModel.class);
                 if (i == 0) {
                     animator.setAnimateSpeed(100);
@@ -404,7 +402,7 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
 
     public void showLocationNotFound() {
         if (!isFinishing()) {
-            CustomDialogBuilder customDialogBuilder = new CustomDialogBuilder(MapInfoActivity.this)
+            CustomDialogBuilder customDialogBuilder = new CustomDialogBuilder(InMapVehicleSimulationActivity.this)
                     .setMessage("Chưa bật gps để xác định vị trí, xin hãy bật gps lên!")
                     .setTitle("Chưa tìm được vị trí")
                     .addLeftButton("ignore", new View.OnClickListener() {

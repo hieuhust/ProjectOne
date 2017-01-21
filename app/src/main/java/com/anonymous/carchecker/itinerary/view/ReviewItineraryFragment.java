@@ -1,4 +1,4 @@
-package com.anonymous.carchecker.itinerary.view.view;
+package com.anonymous.carchecker.itinerary.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,8 +16,7 @@ import com.anonymous.carchecker.R;
 import com.anonymous.carchecker.common.util.MyCalendarDialog;
 import com.anonymous.carchecker.common.util.MyTimeDialog;
 import com.anonymous.carchecker.common.view.BaseFragment;
-import com.anonymous.carchecker.itinerary.view.data.DummyContentLogStatus;
-import com.anonymous.carchecker.position.view.MapInfoActivity;
+import com.anonymous.carchecker.itinerary.data.DummyContentLogStatus;
 
 public class ReviewItineraryFragment extends BaseFragment {
 
@@ -69,7 +68,7 @@ public class ReviewItineraryFragment extends BaseFragment {
         btnReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), MapInfoActivity.class);
+                Intent intent = new Intent(getActivity(), InMapVehicleSimulationActivity.class);
                 getActivity().startActivity(intent);
             }
         });

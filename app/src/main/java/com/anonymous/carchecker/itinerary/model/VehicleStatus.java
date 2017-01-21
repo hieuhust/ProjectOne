@@ -1,4 +1,4 @@
-package com.anonymous.carchecker.itinerary.view.model;
+package com.anonymous.carchecker.itinerary.model;
 
 import com.anonymous.carchecker.common.model.DataModel;
 

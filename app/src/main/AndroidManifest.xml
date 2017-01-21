@@ -65,12 +65,12 @@
             android:label="@string/title_activity_main" />
 
         <activity
-            android:name=".position.view.MapInfoActivity"
+            android:name=".itinerary.view.InMapVehicleSimulationActivity"
             android:label="@string/itinerary"
             android:theme="@style/AppThemeItinerary" />
 
         <activity
-            android:name=".itinerary.view.view.LocationInfoMapActivity"
+            android:name=".position.view.LocationInfoMapActivity"
             android:theme="@style/AppThemeItinerary" />
     </application>
 
