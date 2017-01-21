@@ -110,10 +110,10 @@
     <string name="roboto_thin">sans-serif-thin</string>
     <string name="roboto_medium">sans-serif-medium</string>
 
-    <string name="notice">Notice</string>
-    <string name="network_error">Please check your internet connection and try again</string>
-    <string name="btn_ok">OK</string>
-    <string name="btn_cancel">Cancel</string>
+    <string name="notice">Thông báo</string>
+    <string name="network_error">Xin hãy kiểm tra lại kết nối mạng và thử lại sau.</string>
+    <string name="btn_ok">Đồng ý</string>
+    <string name="btn_cancel">Từ chối</string>
     <string name="from_hour">Từ giờ</string>
     <string name="to_hour">Đến giờ</string>
     <string name="day">Ngày</string>

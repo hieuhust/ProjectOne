@@ -7,10 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.anonymous.carchecker.R;
+import com.anonymous.carchecker.common.ApplicationUtil;
+import com.anonymous.carchecker.common.CustomDialogBuilder;
 import com.anonymous.carchecker.common.data.PreferencesUtil;
+import com.anonymous.carchecker.common.logger.Logger;
 import com.anonymous.carchecker.common.util.MyDialogAlert;
 import com.anonymous.carchecker.login.model.Account;
 import com.anonymous.carchecker.login.view.LoginActivity;
@@ -24,6 +28,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class LocationInfoMapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+    private static final String TAG = "LocationInfoMapActivity";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +43,14 @@ public class LocationInfoMapActivity extends AppCompatActivity implements OnMapR
             actionbar.setHomeButtonEnabled(true);
             actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         }
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map_car_location_info);
-        mapFragment.getMapAsync(this);
+        if (!ApplicationUtil.isNetworkAvailable(getApplicationContext())) {
+            Logger.d(TAG, "network errors");
+            showNetworkUnavailable();
+        } else {
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map_car_location_info);
+            mapFragment.getMapAsync(this);
+        }
     }
 
     @Override
@@ -61,7 +71,18 @@ public class LocationInfoMapActivity extends AppCompatActivity implements OnMapR
         getMenuInflater().inflate(R.menu.location_menu, menu);
         return true;
     }
-
+    private void showNetworkUnavailable() {
+        CustomDialogBuilder customDialogBuilder = new CustomDialogBuilder(this)
+                .setTitle(R.string.notice)
+                .setMessage(R.string.network_error)
+                .addRightButton(R.string.btn_ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                });
+        customDialogBuilder.build().show();
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

@@ -44,7 +44,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCallback {
-    public static final String TAG = "MapInfoActivity";
+    private static final String TAG = "MapInfoActivity";
     private List<Marker> markers = new ArrayList<>();
     private GoogleMap googleMap;
     private final Handler mHandler = new Handler();
@@ -130,26 +130,26 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
 
     private void addDefaultLocations() {
         clearMarkers();
-        addMarkerToMap(new LatLng(21.734106, 105.25956), false);
-        addMarkerToMap(new LatLng(21.73056, 105.287498), true);
-        addMarkerToMap(new LatLng(21.736765, 105.280807), true);
-        addMarkerToMap(new LatLng(21.738024, 105.286842), true);
-        addMarkerToMap(new LatLng(21.734106, 105.25956), true);
-        addMarkerToMap(new LatLng(21.737768, 105.282921), true);
-        addMarkerToMap(new LatLng(21.736843, 105.276176), true);
+        addMarkerToMap(new LatLng(21.734106, 105.25956), false).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.red_marker_a));
+//        addMarkerToMap(new LatLng(21.73056, 105.287498), true);
+//        addMarkerToMap(new LatLng(21.736765, 105.280807), true);
+//        addMarkerToMap(new LatLng(21.738024, 105.286842), true);
+//        addMarkerToMap(new LatLng(21.734106, 105.25956), true);
+//        addMarkerToMap(new LatLng(21.737768, 105.282921), true);
+//        addMarkerToMap(new LatLng(21.736843, 105.276176), true);
         addMarkerToMap(new LatLng(21.732967, 105.259758), true);
-        addMarkerToMap(new LatLng(21.739027, 105.261452), true);
+//        addMarkerToMap(new LatLng(21.739027, 105.261452), true);
         addMarkerToMap(new LatLng(21.733704, 105.261749), true);
-        addMarkerToMap(new LatLng(21.732967, 105.259758), true);
-        addMarkerToMap(new LatLng(21.736698, 105.275635), true);
+//        addMarkerToMap(new LatLng(21.732967, 105.259758), true);
+//        addMarkerToMap(new LatLng(21.736698, 105.275635), true);
+//        addMarkerToMap(new LatLng(21.734106, 105.25956), true);
+//        addMarkerToMap(new LatLng(21.736975, 105.28154), true);
         addMarkerToMap(new LatLng(21.734106, 105.25956), true);
-        addMarkerToMap(new LatLng(21.736975, 105.28154), true);
-        addMarkerToMap(new LatLng(21.734106, 105.25956), true);
-        addMarkerToMap(new LatLng(21.733763, 105.262306), false);
+        addMarkerToMap(new LatLng(21.733763, 105.262306), false).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.red_marker_b));
         googleMap.addPolyline(mRectOptions);
     }
 
-    private void addMarkerToMap(LatLng latLng, boolean isMarkerRemoved) {
+    private Marker addMarkerToMap(LatLng latLng, boolean isMarkerRemoved) {
         Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng)
                 .title("Kien An")
                 .snippet("Map example"));
@@ -158,6 +158,7 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
         if (isMarkerRemoved) {
             marker.setVisible(false);
         }
+        return marker;
     }
 
     public void clearMarkers() {
@@ -170,13 +171,29 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void highLightMarker(Marker marker) {
-        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        double lat = marker.getPosition().latitude;
+        double lng = marker.getPosition().longitude;
+        if(lat == 21.734106 && lng == 105.25956){
+            marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.darkgreen_marker_a));
+        }else if (lat == 21.733763 && lng == 105.262306){
+            marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.darkgreen_marker_b));
+        }else{
+            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        }
         marker.showInfoWindow();
     }
 
     private void resetMarkers() {
         for (Marker marker : this.markers) {
-            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            double lat = marker.getPosition().latitude;
+            double lng = marker.getPosition().longitude;
+            if(lat == 21.734106 && lng == 105.25956){
+                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.red_marker_a));
+            }else if (lat == 21.733763 && lng == 105.262306){
+                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.red_marker_b));
+            }else{
+                marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            }
         }
     }
 
