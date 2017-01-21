@@ -26,7 +26,11 @@ import android.widget.Toast;
 import com.anonymous.carchecker.R;
 import com.anonymous.carchecker.common.ApplicationUtil;
 import com.anonymous.carchecker.common.CustomDialogBuilder;
+import com.anonymous.carchecker.common.data.PreferencesUtil;
 import com.anonymous.carchecker.common.logger.Logger;
+import com.anonymous.carchecker.login.model.Account;
+import com.anonymous.carchecker.login.view.LoginActivity;
+import com.anonymous.carchecker.position.view.model.SpeedModel;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -355,16 +359,25 @@ public class MapInfoActivity extends AppCompatActivity implements OnMapReadyCall
         mSpeedSpinner = (Spinner) MenuItemCompat.getActionView(item);
         List<String> speedList = new ArrayList<>(Arrays.asList(mContext.getResources().getStringArray(R.array.speed)));
         mSpinnerAdapter = new SpinnerAdapter(mContext, R.layout.spinner_item, speedList);
+        PreferencesUtil preferencesUtil = PreferencesUtil.newInstance(this);
+        SpeedModel speed = preferencesUtil.getDataModel(SpeedModel.class);
         mSpeedSpinner.setAdapter(mSpinnerAdapter);
         int width = getResources().getDimensionPixelSize(R.dimen.dropdown_list_width);
         int verticalOffset = getResources().getDimensionPixelSize(R.dimen.dropdown_vertical_offset);
         mSpeedSpinner.setDropDownWidth(width);
         mSpeedSpinner.setDropDownVerticalOffset(verticalOffset);
+        if(speed != null) {
+            mSpeedSpinner.setSelection(speed.mSpeed);
+            mSpinnerAdapter.setSelection(speed.mSpeed);
+        }
         mSpeedSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 mSpeedSpinner.setSelection(i);
                 mSpinnerAdapter.setSelection(i);
+                SpeedModel speedModel = new SpeedModel(i);
+                PreferencesUtil preferencesUtil = PreferencesUtil.newInstance(MapInfoActivity.this);
+                preferencesUtil.setDataModel(speedModel, SpeedModel.class);
                 if (i == 0) {
                     animator.setAnimateSpeed(100);
                 } else if (i == 1) {
