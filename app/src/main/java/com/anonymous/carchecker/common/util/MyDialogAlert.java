@@ -3,6 +3,7 @@ package com.anonymous.carchecker.common.util;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import com.anonymous.carchecker.R;
 import android.view.View;
 
 /**
@@ -30,14 +31,14 @@ public class MyDialogAlert {
         builder.setTitle(title);
         builder.setMessage(message);
         if(isShowPositiveButton)
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(mContext.getResources().getText(R.string.btn_ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 dialogListener.onPositiveButtonClick();
             }
         });
         if(isShowNegativeButton)
-        builder.setNegativeButton("Cancel ", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(mContext.getResources().getText(R.string.btn_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialogListener.onNegativeButtonClick();
