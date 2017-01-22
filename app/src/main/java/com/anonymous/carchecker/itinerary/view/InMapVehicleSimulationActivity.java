@@ -27,6 +27,7 @@ import com.anonymous.carchecker.R;
 import com.anonymous.carchecker.common.CustomDialogBuilder;
 import com.anonymous.carchecker.common.data.PreferencesUtil;
 import com.anonymous.carchecker.common.logger.Logger;
+import com.anonymous.carchecker.common.view.BaseActivity;
 import com.anonymous.carchecker.position.view.SpinnerAdapter;
 import com.anonymous.carchecker.position.view.model.SpeedModel;
 import com.google.android.gms.maps.CameraUpdate;
@@ -45,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class InMapVehicleSimulationActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class InMapVehicleSimulationActivity extends BaseActivity implements OnMapReadyCallback {
     private static final String TAG = "InMapVehicleSimulationActivity";
     private List<Marker> markers = new ArrayList<>();
     private GoogleMap googleMap;
@@ -371,21 +372,21 @@ public class InMapVehicleSimulationActivity extends AppCompatActivity implements
                 SpeedModel speedModel = new SpeedModel(i);
                 PreferencesUtil preferencesUtil = PreferencesUtil.newInstance(InMapVehicleSimulationActivity.this);
                 preferencesUtil.setDataModel(speedModel, SpeedModel.class);
-                if (i == 0) {
+                if (i == 8) {
                     animator.setAnimateSpeed(100);
-                } else if (i == 1) {
+                } else if (i == 7) {
                     animator.setAnimateSpeed(200);
-                } else if (i == 2) {
+                } else if (i == 6) {
                     animator.setAnimateSpeed(300);
-                } else if (i == 3) {
+                } else if (i == 5) {
                     animator.setAnimateSpeed(400);
                 } else if (i == 4) {
                     animator.setAnimateSpeed(500);
-                } else if (i == 5) {
+                } else if (i == 3) {
                     animator.setAnimateSpeed(600);
-                } else if (i == 6) {
+                } else if (i == 2) {
                     animator.setAnimateSpeed(800);
-                } else if (i == 7) {
+                } else if (i == 1) {
                     animator.setAnimateSpeed(1000);
                 } else {
                     animator.setAnimateSpeed(2000);

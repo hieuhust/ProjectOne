@@ -27,7 +27,7 @@
     <string name="contact">Liên hệ: </string>
     <string name="mien_bac">Miền Bắc</string>
     <string name="mien_nam">Miền Nam</string>
-    <string name="number_car">Số xe: 120</string>
+    <string name="number_car">Số xe:</string>
 
 
     <!-- Menu of NavigationView -->
@@ -83,7 +83,7 @@
     <string name="confirm">Xác nhận</string>
     <string name="watch">xem</string>
     <string name="stop">dừng</string>
-    <string name="itinerary">hành trình</string>
+    <string name="itinerary">Hành trình</string>
     <string name="can_not_call_number_msg">Không thể gọi tới số</string>
     <string name="search_hint">Tìm kiếm theo biển số xe</string>
     <string name="inform_press_back_again">Bấm phím back một lần nữa để thoát chương trình</string>
@@ -91,15 +91,15 @@
     <string name="location">Vị trí</string>
 
     <string-array name="speed">
-        <item>100</item>
-        <item>200</item>
-        <item>300</item>
-        <item>400</item>
-        <item>500</item>
-        <item>600</item>
-        <item>800</item>
-        <item>1000</item>
-        <item>1500</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
     </string-array>
 
     <!--font name-->

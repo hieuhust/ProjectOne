@@ -16,6 +16,7 @@ import com.anonymous.carchecker.common.CustomDialogBuilder;
 import com.anonymous.carchecker.common.data.PreferencesUtil;
 import com.anonymous.carchecker.common.logger.Logger;
 import com.anonymous.carchecker.common.util.MyDialogAlert;
+import com.anonymous.carchecker.common.view.BaseActivity;
 import com.anonymous.carchecker.login.model.Account;
 import com.anonymous.carchecker.login.view.LoginActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,7 +28,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class LocationInfoMapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+public class LocationInfoMapActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
     private static final String TAG = "LocationInfoMapActivity";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
